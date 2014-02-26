@@ -12,6 +12,7 @@ true.
 - Allow to configure the default implemantation based on a single
   template.
 - Implement support for OpenJDK.
+- Implement support to install a JRE only.
 
 
 # Role variables
