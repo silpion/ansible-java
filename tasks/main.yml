@@ -5,7 +5,7 @@
 - name: Fail on unsupported platform
   tags: java
   fail: msg="Operating system not supported {{ ansible_os_family }}"
-  when: ansible_os_family not in ['Archlinux', 'Debian', 'RedHat'] and (java_openjdk_when or java_oracle_when)
+  when: ansible_os_family not in ['Archlinux', 'Debian', 'RedHat', 'Suse'] and (java_openjdk_when or java_oracle_when)
 #   or unsupported architecture.
 - name: Fail on unsupported architecture
   tags: java
