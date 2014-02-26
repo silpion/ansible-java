@@ -1,0 +1,4 @@
+---
+- name: OpenJDK not supported yet
+  tags: java
+  fail: msg="OpenJDK is not supported yet"

@@ -1,0 +1,29 @@
+---
+# Main list of tasks to be executed.
+#
+#   Fail the play if it runs on an unsupported platform,
+- name: Fail on unsupported platform
+  tags: java
+  fail: msg="Operating system not supported {{ ansible_os_family }}"
+  when: ansible_os_family not in ['Archlinux', 'Debian', 'RedHat'] and (java_openjdk_when or java_oracle_when)
+#   or unsupported architecture.
+- name: Fail on unsupported architecture
+  tags: java
+  fail: msg="Architecture not support supported {{ ansible_architecture }}"
+  when: ansible_architecture not in ['x86_64'] and (java_openjdk_when or java_oracle_when)
+
+# Install OpenJDK only if specifically activated.
+- include: OpenJDK.yml
+  tags: java
+  when: java_openjdk_when
+
+# Install Oracle JDK only if specifically activated.
+- include: Oracle.yml
+  tags: java
+  when: java_oracle_when
+
+# Configure the systems default Java implementation if any 
+#   implementation has been installed.
+- include: default.yml
+  tags: java
+  when: (java_openjdk_when or java_oracle_when)

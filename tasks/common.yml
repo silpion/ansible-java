@@ -1,0 +1,21 @@
+---
+# Common tasks applicable to both Oracle and OpenJDK
+
+# this directory will contain the Java downloads
+- name: Install Java download directory (local)
+  tags: java
+  local_action: file
+    state=directory
+    owner=root
+    group=root
+    mode=0755
+    dest={{ ansible_data_path }}
+
+- name: Install Java upload directory
+  tags: java
+  file:
+    state=directory
+    owner=root
+    group=root
+    mode=0755
+    dest={{ ansible_data_path }}

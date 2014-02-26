@@ -1,0 +1,35 @@
+---
+# setup the default Java implementation via system environment
+- name: Fail on invalid user input
+  tags: java
+  fail: msg="Default Java implementation must be set to 'oracle' or 'openjdk' ({{ java_default_implementation }})"
+  when: (java_default_implementation != 'oracle' and java_default_implementation != 'openjdk')
+
+
+- name: Install Oracle Java as default implementation
+  tags: java
+  template:
+    src=java.environment.oracle.sh.j2
+    dest={{ java_install_dir }}/java.sh
+    owner=root
+    group=root
+    mode=0755
+  when: java_default_implementation == 'oracle'
+
+- name: Install OpenJDK Java as default implementation
+  tags: java
+  template:
+    src=java.environment.openjdk.sh.j2
+    dest={{ java_install_dir }}/java.sh
+    owner=root
+    group=root
+    mode=0755
+  when: java_default_implementation == 'openjdk'
+
+
+- name: Activate Java system environment configuration
+  tags: java
+  file:
+    state=link
+    src={{ java_install_dir }}/java.sh
+    dest=/etc/profile.d/java.sh

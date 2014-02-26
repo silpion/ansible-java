@@ -1,0 +1,19 @@
+---
+# default variables
+#   These are accessable during the plays.
+#   These may get overridden in site-, playbook- or host vars.
+
+# Should OpenJDK get installed?
+java_openjdk_when: false
+java_openjdk_version: 
+
+# Should Oracle JDK get installed?
+java_oracle_when: false
+java_oracle_version: 7u51
+java_oracle_build: b13
+java_oracle_sha256sum: 77367c3ef36e0930bf3089fb41824f4b8cf55dcc8f43cce0868f7687a474f55c
+
+# Default Java implementation.
+#   Most enterprise software is supported on Oracle Java only,
+#   so the default is oracle.
+java_default_implementation: oracle

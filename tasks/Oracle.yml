@@ -1,0 +1,88 @@
+---
+# Install Oracle Java JDK
+#
+# Installing Java while fetching the distribution from Oracle is
+# a nightmare.
+#
+# Version information is a huge mess with Oracle Java. Naming of
+# files, directories and zip archives is never consistent and one
+# never knows what they are going to change.
+#
+# What this does is trying to use Ansible capabilities while
+# allowing a usable installation of the Oracle Java JDK.
+
+
+# Any implementation of Java (Oracle and OpenJDK) need some Ansible
+#   specific configuration.
+- include: common.yml
+  tags: java
+
+
+# Test whether we need to download Java.
+- name: Install Oracle Java redis package sha256sum (local)
+  tags: java
+  local_action: template
+    src=sha256sum.oracle.j2
+    dest=/tmp/jdk-{{ java_oracle_version }}-linux-x64.tar.gz.sha256sum
+
+- name: Verify Oracle Java redis package sha256sum (local)
+  tags: java
+  ignore_errors: true
+  local_action: command
+    sha256sum
+      --status
+      --check
+      /tmp/jdk-{{ java_oracle_version }}-linux-x64.tar.gz.sha256sum
+  register: java_oracle_redis_exists
+
+
+# Download the Java distribution from Oracle to the workstations'
+# filesystem. Yeah, right, accept license agreement...
+# This allows to distribute Java to any number of hosts in the
+# context of a local network instead of downloading Java again
+# for every role/node which depends on this role.
+- name: Download Oracle Java redis package (local)
+  tags: java
+  local_action: command
+    curl
+      --location
+      --insecure
+      --remote-name
+      --cookie gpw_e24=h
+      --cookie-jar "/tmp/jdk-{{ java_oracle_version }}-linux-x64.tar.gz.cookie"
+      "{{ java_oracle_mirror }}/{{ java_oracle_version }}-{{ java_oracle_build }}/jdk-{{ java_oracle_version }}-linux-x64.tar.gz"
+    chdir={{ ansible_data_path }}
+  when: java_oracle_redis_exists.rc != 0
+
+
+# Download of the Oracle Java distribution was to the workstation.
+#   Copy it over to the node in question.
+- name: Copy Oracle Java redis package to the node
+  tags: java
+  copy:
+    src="{{ ansible_data_path }}/jdk-{{ java_oracle_version }}-linux-x64.tar.gz"
+    dest="{{ ansible_data_path }}/jdk-{{ java_oracle_version }}-linux-x64.tar.gz"
+    owner=root
+    group=root
+    mode=0644
+
+
+# Directory for unarchiving the configured version of Java.
+- name: Install Oracle Java directory
+  tags: java
+  file:
+    state=directory
+    owner=root
+    group=root
+    mode=0755
+    dest="{{ java_install_dir }}/oracle/{{ java_oracle_version }}-{{ java_oracle_build }}"
+
+
+# Use tar strip-components option here to remove a further
+# unpredictable directory name from the archive.
+- name: Install Oracle Java
+  tags: java
+  command: tar --strip-components=1
+      -xzf {{ ansible_data_path }}/jdk-{{ java_oracle_version }}-linux-x64.tar.gz
+      -C {{ java_install_dir }}/oracle/{{ java_oracle_version }}-{{ java_oracle_build }}
+    creates={{ java_install_dir }}/oracle/{{ java_oracle_version }}-{{ java_oracle_build }}/bin/java
