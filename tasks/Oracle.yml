@@ -6,7 +6,7 @@
 #
 # Version information is a huge mess with Oracle Java. Naming of
 # files, directories and zip archives is never consistent and one
-# never knows what they are going to change.
+# never knows what they are up to next.
 #
 # What this does is trying to use Ansible capabilities while
 # allowing a usable installation of the Oracle Java JDK.
@@ -19,12 +19,6 @@
 
 
 # Test whether we need to download Java.
-- name: Install Oracle Java redis package sha256sum (local)
-  tags: java
-  local_action: template
-    src=sha256sum.oracle.j2
-    dest=/tmp/jdk-{{ java_oracle_version }}-linux-x64.tar.gz.sha256sum
-
 - name: Verify Oracle Java redis package sha256sum (local)
   tags: java
   ignore_errors: true
@@ -32,7 +26,7 @@
     sha256sum
       --status
       --check
-      /tmp/jdk-{{ java_oracle_version }}-linux-x64.tar.gz.sha256sum
+      {{ ansible_data_path }}/java.sha256sum
   register: java_oracle_redis_exists
 
 
@@ -41,6 +35,11 @@
 # This allows to distribute Java to any number of hosts in the
 # context of a local network instead of downloading Java again
 # for every role/node which depends on this role.
+# TODO Make this code usable (see README)
+#- include: curl.yml
+#  tags: java
+#  when: java_oracle_redis_exists.rc != 0
+
 - name: Download Oracle Java redis package (local)
   tags: java
   local_action: command
@@ -49,40 +48,46 @@
       --insecure
       --remote-name
       --cookie gpw_e24=h
-      --cookie-jar "/tmp/jdk-{{ java_oracle_version }}-linux-x64.tar.gz.cookie"
-      "{{ java_oracle_mirror }}/{{ java_oracle_version }}-{{ java_oracle_build }}/jdk-{{ java_oracle_version }}-linux-x64.tar.gz"
+      --cookie-jar /tmp/{{ java_oracle_redis_filename }}.cookie
+      {{ java_oracle_redis_mirror }}
     chdir={{ ansible_data_path }}
+  register: java_oracle_redis_download
   when: java_oracle_redis_exists.rc != 0
 
 
-# Download of the Oracle Java distribution was to the workstation.
-#   Copy it over to the node in question.
-- name: Copy Oracle Java redis package to the node
+# Test whether downloaded redistributable package passes sha256sum
+- name: Verify Oracle Java redis package sha256sum (local)
   tags: java
-  copy:
-    src="{{ ansible_data_path }}/jdk-{{ java_oracle_version }}-linux-x64.tar.gz"
-    dest="{{ ansible_data_path }}/jdk-{{ java_oracle_version }}-linux-x64.tar.gz"
-    owner=root
-    group=root
-    mode=0644
+  local_action: command
+    sha256sum
+      --status
+      --check
+      {{ ansible_data_path }}/java.sha256sum
+  when: java_oracle_redis_download|changed
 
 
 # Directory for unarchiving the configured version of Java.
-- name: Install Oracle Java directory
+- name: Install Oracle Java base directory
   tags: java
   file:
     state=directory
     owner=root
     group=root
     mode=0755
-    dest="{{ java_install_dir }}/oracle/{{ java_oracle_version }}-{{ java_oracle_build }}"
+    dest={{ java_install_dir }}/oracle
 
-
-# Use tar strip-components option here to remove a further
-# unpredictable directory name from the archive.
+# Install the Oracle redistributable package to the node
 - name: Install Oracle Java
   tags: java
-  command: tar --strip-components=1
-      -xzf {{ ansible_data_path }}/jdk-{{ java_oracle_version }}-linux-x64.tar.gz
-      -C {{ java_install_dir }}/oracle/{{ java_oracle_version }}-{{ java_oracle_build }}
-    creates={{ java_install_dir }}/oracle/{{ java_oracle_version }}-{{ java_oracle_build }}/bin/java
+  unarchive:
+    src={{ ansible_data_path }}/{{ java_oracle_redis_filename }}
+    dest={{ java_install_dir }}/oracle/
+
+
+# Setup a custom fact to allow roles depending on Java to configure
+#   JAVA_HOME variable
+- name: Set JAVA_HOME ansible fact
+  tags: java
+  set_fact:
+    java_home={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
+  when: java_default_implementation == 'oracle'

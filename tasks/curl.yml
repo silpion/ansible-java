@@ -1,0 +1,20 @@
+---
+- name: Install cURL (local)
+  tags: java
+  local_action: pacman state=present name=curl update_cache=no
+  when: ansible_os_family == 'Archlinux'
+
+- name: Install cURL (local)
+  tags: java
+  local_action: apt state=present name=curl update_cache=no
+  when: ansible_os_family == 'Debian'
+
+- name: Install cURL (local)
+  tags: java
+  local_action: yum state=present name=curl
+  when: ansible_os_family == 'RedHat'
+
+- name: Install cURL (local)
+  tags: java
+  local_action: zypper state=present name=curl
+  when: ansible_os_family == 'Suse'

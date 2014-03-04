@@ -1,10 +1,34 @@
 ---
 # Static variables/constants.
 #   Version of our role.
-ansible_data_path: /usr/local/src/ansible/data
-
 java_role_version: '0.1.0'
 
+# path for ansible to store downloaded or templated data
+ansible_data_path: /usr/local/src/ansible/data
+
+# base installation directory for any Java implementation/distribution
 java_install_dir: /opt/java
+
+
+# Where to download Oracle Java implementation from
 java_oracle_mirror: 'http://download.oracle.com/otn-pub/java/jdk'
 
+
+# Helper variables for Oracle to keep code readable
+
+#  OpenJDK
+java_openjdk_version_str_redis:
+java_openjdk_version_str_pkg:
+java_openjdk_redis_filename:
+java_openjdk_redis_mirror:
+
+
+#  Oracle
+#   configure a version string Oracle uses from their version information
+java_oracle_version_str_redis: "{{ java_oracle_version_minor }}u{{ java_oracle_version_update }}"
+#   top level directory within the Oracle redis archive
+java_oracle_version_str_pkg: "{{ java_default_distribution }}{{ java_oracle_version_major }}.{{ java_oracle_version_minor }}.0_{{ java_oracle_version_update }}"
+#   source file name for either the JRE or JDK for the Oracle Java implementation
+java_oracle_redis_filename: "{{ java_default_distribution }}-{{ java_oracle_version_str_redis }}-linux-x64.tar.gz"
+#   complete URL for downloading either the JRE or JDK for the Oracle Java implementation
+java_oracle_redis_mirror: "{{ java_oracle_mirror }}/{{ java_oracle_version_minor }}u{{ java_oracle_version_update }}-b{{ java_oracle_version_build }}/{{ java_oracle_redis_filename }}"

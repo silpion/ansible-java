@@ -1,43 +1,113 @@
 # ansible-java
 
-Install Java JDK either with Oracle or OpenJDK implementation, or both.
-Does nothing if neither java\_openjdk\_when nor java\_oracle\_when set
-true.
+Install Java JRE or JDK with either one of Oracle or OpenJDK
+implementation, or both.
+
+
+# Architecture
+
+The role downloads redistributable packages from the internet
+to the hosts local filesystem before it may install those on
+any number of managed nodes in the local network.
+
+Downloads are performed with the command module using curl.
+It is required to have curl installed on the local host you
+are running ansible-playbook on to manage nodes.
+
+This dependency is not managed within this role as it feels
+that there is no way to install packages with local_action
+based on ansible_os_family/ansible_distribution when conditionals.
+These facts have values suitable to the managed node but to
+the host running ansible-playbook on.
+
+Please: Proove me wrong!
 
 
 # ToDos
 
-- Automatically set java_default_implementation when only one
-  implementation gets installed.
-- Allow to configure the default implemantation based on a single
-  template.
 - Implement support for OpenJDK.
-- Implement support to install a JRE only.
+- Use assert module in favor of fail module (see Gotchas below).
+- (Allow local installation of cURL IF possible.)
+
+## Gotchas
+
+Ansible 1.5 introduced a module "assert". This should be used in
+tasks/{main,default}.yml. Code is available but commented out because
+currently I get a Python stack trace when using the assert module.
+For that reason currently there is the fail module favored.
+
+Please: Proove me wrong!
 
 
 # Role variables
 
-Set "true" when OpenJDK Java should get installed.
-- java_openjdk_when [false]
+## java_default_implementation
 
-Configure OpenJDK version to use.
-- java_openjdk_version
+Configure default Java implementation.
+Choices:
+- oracle
+- openjdk
+Default: oracle
 
-Set "true" when Oracle Java JDK should get installed.
-- java_oracle_when [false]
 
-Configure Oracle JDK version to use.
-- java_oracle_version [7u51]
+## java_default_distribution
 
-Configure Oracle JDK build to use.
-- java_oracle_build [b13]
+Configure default Java distribution.
+Choices:
+- jre
+- jdk
+Default: jdk
+
+
+## java_openjdk_when
+
+
+## java_openjdk_version_*
+
+### java_openjdk_version_major
+
+### java_openjdk_version_minor
+
+### java_openjdk_version_patch
+
+
+## java_oracle_when
+
+Set "true" when Oracle Java implementation should get installed.
+Default: true
+
+
+## java_oracle_version_*
+
+Default: 1.7.0_51-b13 (7u51-b13)
+
+### java_oracle_version_major
+
+Default: 1
+
+### java_oracle_version_minor
+
+Default: 7
+
+### java_oracle_version_patch
+
+Default: 0
+
+### java_oracle_version_build
+
+Default: 13
+
+
+## java_oracle_redis_jdk_sha256sum
 
 SHA256 sum for the downloaded Oracle Java JDK redistributable package.
-- java_oracle_sha256sum [77367c3ef36e0930bf3089fb41824f4b8cf55dcc8f43cce0868f7687a474f55c]
+Default: 77367c3ef36e0930bf3089fb41824f4b8cf55dcc8f43cce0868f7687a474f55c
 
-Setup the default implementation of Java to use.
-Must get set to 'openjdk' if Oracle is not get installed.
-- java_default_implementation [oracle]
+## java_oracle_redis_jre_sha256sum
+
+SHA256 sum for the downloaded Oracle Java JRE redistributable package.
+Default:
+
 
 # Dependencies
 

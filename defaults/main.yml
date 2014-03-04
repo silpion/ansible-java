@@ -3,17 +3,47 @@
 #   These are accessable during the plays.
 #   These may get overridden in site-, playbook- or host vars.
 
-# Should OpenJDK get installed?
-java_openjdk_when: false
-java_openjdk_version: 
-
-# Should Oracle JDK get installed?
-java_oracle_when: false
-java_oracle_version: 7u51
-java_oracle_build: b13
-java_oracle_sha256sum: 77367c3ef36e0930bf3089fb41824f4b8cf55dcc8f43cce0868f7687a474f55c
-
 # Default Java implementation.
 #   Most enterprise software is supported on Oracle Java only,
 #   so the default is oracle.
-java_default_implementation: oracle
+#   Choices:
+#   - oracle
+#   - openjdk
+java_default_implementation: 'oracle'
+
+# Default Java distribution.
+#   Go for the JDK here in favor of a JRE only.
+#   Choices:
+#   - jdk
+#   - jre
+java_default_distribution: 'jdk'
+
+
+# OpenJDK
+#   Should OpenJDK get installed?
+java_openjdk_when: false
+
+#   Version information
+java_openjdk_version_major:
+java_openjdk_version_minor:
+java_openjdk_version_patch:
+
+
+# Oracle
+#   Should Oracle JDK get installed?
+java_oracle_when: true
+
+#   Version information
+java_oracle_version_major: '1'
+java_oracle_version_minor: '7'
+java_oracle_version_patch: '0'
+java_oracle_version_update: '51'
+java_oracle_version_build: '13'
+
+
+#   Redistributable package information
+java_oracle_redis_jdk_filename: "jdk-{{ java_oracle_version_str_redis }}-linux-x64.tar.gz"
+java_oracle_redis_jdk_sha256sum: '77367c3ef36e0930bf3089fb41824f4b8cf55dcc8f43cce0868f7687a474f55c'
+
+java_oracle_redis_jre_filename: "jre-{{ java_oracle_version_str_redis }}-linux-x64.tar.gz"
+java_oracle_redis_jre_sha256sum: 'a8ef4fd8403398f9c2579bb97b5e6643661dabd510e4c3b79529ede9e1f8584a'
