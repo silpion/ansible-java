@@ -11,11 +11,10 @@
     mode=0755
     dest={{ ansible_data_path }}
 
-- name: Install Java upload directory
+
+# Test whether we need to download Java.
+- name: Install Oracle Java redis package sha256sum (local)
   tags: java
-  file:
-    state=directory
-    owner=root
-    group=root
-    mode=0755
-    dest={{ ansible_data_path }}
+  local_action: template
+    src=sha256sum.j2
+    dest={{ ansible_data_path }}/java.sha256sum
