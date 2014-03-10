@@ -2,23 +2,12 @@
 # Main list of tasks to be executed.
 #
 #   Fail the play if it runs on an unsupported platform,
-#- assert: ansible_os_family in ['Archlinux', 'Debian', 'RedHat', 'Suse']
-#  tags: java
-#  when: java_openjdk_when or java_oracle_when
-#   or unsupported architecture.
-#- assert: ansible_architecture in ['x86_64']
-#  tags: java
-#  when: java_openjdk_when or java_oracle_when
-
-- name: Fail on unsupported platform
+- name: Assert platform is supported
   tags: java
-  fail: msg="Platform not supported '{{ ansible_os_family }}'"
-  when: ansible_os_family not in ['Archlinux', 'Debian', 'RedHat', 'Suse']
-
-- name: Fail on unsupported architecture
-  tags: java
-  fail: msg="Architecture not supported '{{ ansible_architecture }}'"
-  when: ansible_architecture not in ['x86_64']
+  assert:
+    that:
+      - ansible_os_family in ['Archlinux', 'Debian', 'RedHat', 'Suse']
+      - ansible_architecture in ['x86_64']
 
 
 # Install OpenJDK only if specifically activated.
