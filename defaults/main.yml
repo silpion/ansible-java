@@ -1,7 +1,5 @@
 ---
 # default variables
-#   These are accessable during the plays.
-#   These may get overridden in site-, playbook- or host vars.
 
 # Default Java implementation.
 #   Most enterprise software is supported on Oracle Java only,

@@ -10,7 +10,7 @@ dependencies: []
 #   galaxy.
 galaxy_info:
   author: Mark Kusch
-  description: Ansible role to manage Java installation
+  description: Manage Java installation
   company: http://silpion.de
   license: Apache 2
   min_ansible_version: 1.4
