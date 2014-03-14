@@ -6,8 +6,8 @@
   tags: java
   local_action: file
     state=directory
-    owner=root
-    group=root
+    owner=0
+    group=0
     mode=0755
     dest={{ ansible_data_path }}
 
