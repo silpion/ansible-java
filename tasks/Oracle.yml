@@ -23,9 +23,11 @@
   tags: java
   ignore_errors: true
   local_action: command
-    sha256sum
-      --status
+    shasum
+      --algorithm 256
+      --portable
       --check
+      --status
       {{ ansible_data_path }}/java.sha256sum
   register: java_oracle_redis_exists
 
@@ -59,9 +61,11 @@
 - name: Verify Oracle Java redis package sha256sum (local)
   tags: java
   local_action: command
-    sha256sum
-      --status
+    shasum
+      --algorithm 256
+      --portable
       --check
+      --status
       {{ ansible_data_path }}/java.sha256sum
   when: java_oracle_redis_download|changed
 
@@ -71,8 +75,8 @@
   tags: java
   file:
     state=directory
-    owner=root
-    group=root
+    owner=0
+    group=0
     mode=0755
     dest={{ java_install_dir }}/oracle
 
