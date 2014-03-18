@@ -18,6 +18,12 @@
   tags: java
 
 
+# We need to manage SELinux on RedHat families
+- include: selinux.yml
+  tags: java
+  when: ansible_os_family == 'RedHat'
+
+
 # Test whether we need to download Java.
 - name: Verify Oracle Java redis package sha256sum (local)
   tags: java
