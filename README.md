@@ -12,7 +12,7 @@ any number of managed nodes in the local network.
 
 Downloads are performed with the command module using curl.
 It is required to have curl installed on the local host you
-are running ansible-playbook on to manage nodes.
+are running ansible-playbook on to manage nodes (your workstation).
 
 This dependency is not managed within this role as it feels
 that there is no way to install packages with local_action
@@ -26,17 +26,7 @@ Please: Proove me wrong!
 # ToDos
 
 - Implement support for OpenJDK.
-- Use assert module in favor of fail module (see Gotchas below).
 - (Allow local installation of cURL IF possible.)
-
-## Gotchas
-
-Ansible 1.5 introduced a module "assert". This should be used in
-tasks/{main,default}.yml. Code is available but commented out because
-currently I get a Python stack trace when using the assert module.
-For that reason currently there is the fail module favored.
-
-Please: Proove me wrong!
 
 
 # Role variables

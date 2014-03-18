@@ -1,0 +1,5 @@
+---
+java_package_manager: apt
+java_package_list: []
+java_package_list_selinux:
+  - python-selinux

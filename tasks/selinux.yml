@@ -1,0 +1,6 @@
+---
+- include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Install Python SELinux bindings
+  action: "{{ java_package_manager }} state=installed name={{ item }}"
+  with_items: java_package_list_selinux

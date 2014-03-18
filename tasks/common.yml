@@ -18,3 +18,9 @@
   local_action: template
     src=sha256sum.j2
     dest={{ ansible_data_path }}/java.sha256sum
+
+
+# We need to manage SELinux
+- include: selinux.yml
+  tags: java
+  when: ansible_selinux.status == 'enabled'
