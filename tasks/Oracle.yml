@@ -82,6 +82,16 @@
     dest={{ java_install_dir }}/oracle/
 
 
+# Archives may be packaged with some useless uid and gid
+- name: Fixup filesystem permissions
+  file:
+    state=directory
+    owner=0
+    group=0
+    recurse=true
+    dest={{ java_install_dir }}
+
+
 # Setup a custom fact to allow roles depending on Java to configure
 #   JAVA_HOME variable
 - name: Set JAVA_HOME ansible fact
