@@ -49,13 +49,12 @@
       --location
       --insecure
       --remote-name
-      --cookie gpw_e24=h
+      --cookie oraclelicense=accept-securebackup-cookie
       --cookie-jar /tmp/{{ java_oracle_redis_filename }}.cookie
       {{ java_oracle_redis_mirror }}
     chdir={{ ansible_data_path }}
   register: java_oracle_redis_download
   when: java_oracle_redis_exists.rc != 0
-
 
 # Test whether downloaded redistributable package passes sha256sum
 - name: Verify Oracle Java redis package sha256sum (local)
