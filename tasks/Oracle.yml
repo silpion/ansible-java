@@ -37,11 +37,6 @@
 # This allows to distribute Java to any number of hosts in the
 # context of a local network instead of downloading Java again
 # for every role/node which depends on this role.
-# TODO Make this code usable (see README)
-#- include: curl.yml
-#  tags: java
-#  when: java_oracle_redis_exists.rc != 0
-
 - name: Download Oracle Java redis package (local)
   tags: java
   local_action: command
