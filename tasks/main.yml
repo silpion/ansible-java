@@ -6,7 +6,7 @@
   tags: java
   assert:
     that:
-      - ansible_os_family in ['Archlinux', 'Debian', 'RedHat', 'Suse']
+      - ansible_os_family in ['Debian', 'RedHat']
       - ansible_architecture in ['x86_64']
 
 
