@@ -38,14 +38,14 @@ galaxy_info:
     - 18
     - 19
     - 20
-  - name: opensuse
-    versions:
-    - all
-    - 12.1
-    - 12.2
-    - 12.3
-    - 13.1
-    - 13.2
+  # - name: opensuse
+  #   versions:
+  #   - all
+  #   - 12.1
+  #   - 12.2
+  #   - 12.3
+  #   - 13.1
+  #   - 13.2
   # - name: GenericBSD
   #   versions:
   #   - all
@@ -74,15 +74,15 @@ galaxy_info:
     - raring
     - saucy
     - trusty
-  - name: SLES
-    versions:
-    - all
-    - 10SP3
-    - 10SP4
-    - 11
-    - 11SP1
-    - 11SP2
-    - 11SP3
+  # - name: SLES
+  #   versions:
+  #   - all
+  #   - 10SP3
+  #   - 10SP4
+  #   - 11
+  #   - 11SP1
+  #   - 11SP2
+  #   - 11SP3
   # - name: GenericLinux
   #   versions:
   #   - all
