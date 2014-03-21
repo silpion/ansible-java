@@ -2,5 +2,5 @@
 - include_vars: "{{ ansible_os_family }}.yml"
 
 - name: Install Ansible SELinux requirements
-  action: "{{ java_package_manager }} state=installed name={{ item }}"
+  action: "{{ ansible_pkg_mgr }} state=installed name={{ item }}"
   with_items: java_package_list_selinux
