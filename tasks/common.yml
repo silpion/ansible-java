@@ -18,3 +18,8 @@
   local_action: template
     src=sha256sum.j2
     dest={{ ansible_data_path }}/java.sha256sum
+
+
+# Ansile requirement if SELinux is enabled
+- include: selinux.yml
+  tags: java

@@ -1,5 +1,4 @@
 ---
-java_package_manager: yum
 java_package_list: []
 java_package_list_selinux:
   - libselinux-python
