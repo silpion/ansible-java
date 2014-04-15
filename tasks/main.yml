@@ -3,7 +3,9 @@
 #
 #   Fail the play if it runs on an unsupported platform,
 - name: Assert platform is supported
-  tags: java
+  tags:
+    - java
+    - download
   assert:
     that:
       - ansible_os_family in ['Debian', 'RedHat']
@@ -12,12 +14,10 @@
 
 # Install OpenJDK only if specifically activated.
 - include: OpenJDK.yml
-  tags: java
   when: java_openjdk_when
 
 # Install Oracle JDK only if specifically activated.
 - include: Oracle.yml
-  tags: java
   when: java_oracle_when
 
 # Configure the systems default Java implementation if any 
