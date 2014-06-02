@@ -3,7 +3,9 @@
 
 # this directory will contain the Java downloads
 - name: Install Java download directory (local)
-  tags: java
+  tags:
+    - java
+    - download
   local_action: file
     state=directory
     owner=0
@@ -14,7 +16,9 @@
 
 # Test whether we need to download Java.
 - name: Install Oracle Java redis package sha256sum (local)
-  tags: java
+  tags:
+    - java
+    - download
   local_action: template
     src=sha256sum.j2
     dest={{ ansible_data_path }}/java.sha256sum

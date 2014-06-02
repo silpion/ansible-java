@@ -15,12 +15,15 @@
 # Any implementation of Java (Oracle and OpenJDK) need some Ansible
 #   specific configuration.
 - include: common.yml
-  tags: java
-
+  tags:
+    - java
+    - download
 
 # Test whether we need to download Java.
 - name: Verify Oracle Java redis package sha256sum (local)
-  tags: java
+  tags:
+    - java
+    - download
   ignore_errors: true
   local_action: command
     shasum
@@ -38,7 +41,9 @@
 # context of a local network instead of downloading Java again
 # for every role/node which depends on this role.
 - name: Download Oracle Java redis package (local)
-  tags: java
+  tags:
+    - java
+    - download
   local_action: command
     curl
       --location
@@ -48,12 +53,15 @@
       --cookie-jar /tmp/{{ java_oracle_redis_filename }}.cookie
       {{ java_oracle_redis_mirror }}
     chdir={{ ansible_data_path }}
+    creates={{ ansible_data_path }}/{{ java_oracle_redis_filename }}
   register: java_oracle_redis_download
   when: java_oracle_redis_exists.rc != 0
 
 # Test whether downloaded redistributable package passes sha256sum
 - name: Verify Oracle Java redis package sha256sum (local)
-  tags: java
+  tags:
+    - java
+    - download
   local_action: command
     shasum
       --algorithm 256

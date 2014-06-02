@@ -4,7 +4,9 @@
 #  tags: java
 
 - name: Fail on invalid user data
-  tags: java
+  tags:
+    - java
+    - download
   fail:
     msg="java_default_implementation must be one of 'oracle' or 'openjdk'"
   when: java_default_implementation not in ['oracle', 'openjdk']
