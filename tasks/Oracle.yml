@@ -25,6 +25,7 @@
     - java
     - download
   ignore_errors: true
+  register: java_oracle_redis_exists
   local_action: command
     shasum
       --algorithm 256
@@ -32,7 +33,6 @@
       --check
       --status
       {{ ansible_data_path }}/java.sha256sum
-  register: java_oracle_redis_exists
 
 
 # Download the Java distribution from Oracle to the workstations'
@@ -44,6 +44,8 @@
   tags:
     - java
     - download
+  register: java_oracle_redis_download
+  when: java_oracle_redis_exists.rc != 0
   local_action: command
     curl
       --location
@@ -54,14 +56,13 @@
       {{ java_oracle_redis_mirror }}
     chdir={{ ansible_data_path }}
     creates={{ ansible_data_path }}/{{ java_oracle_redis_filename }}
-  register: java_oracle_redis_download
-  when: java_oracle_redis_exists.rc != 0
 
 # Test whether downloaded redistributable package passes sha256sum
 - name: Verify Oracle Java redis package sha256sum (local)
   tags:
     - java
     - download
+  when: java_oracle_redis_download|changed
   local_action: command
     shasum
       --algorithm 256
@@ -69,7 +70,6 @@
       --check
       --status
       {{ ansible_data_path }}/java.sha256sum
-  when: java_oracle_redis_download|changed
 
 
 # Directory for unarchiving the configured version of Java.
@@ -104,6 +104,6 @@
 #   JAVA_HOME variable
 - name: Set JAVA_HOME ansible fact
   tags: java
+  when: java_default_implementation == 'oracle'
   set_fact:
     java_home={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
-  when: java_default_implementation == 'oracle'

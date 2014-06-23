@@ -20,7 +20,7 @@
 - include: Oracle.yml
   when: java_oracle_when
 
-# Configure the systems default Java implementation if any 
+# Configure the systems default Java implementation if any
 #   implementation has been installed.
 - include: default.yml
   tags: java
