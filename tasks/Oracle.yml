@@ -44,6 +44,7 @@
   tags:
     - java
     - download
+  sudo: no
   register: java_oracle_redis_download
   when: java_oracle_redis_exists.rc != 0
   local_action: command
@@ -56,6 +57,14 @@
       {{ java_oracle_redis_mirror }}
     chdir={{ ansible_data_path }}
     creates={{ ansible_data_path }}/{{ java_oracle_redis_filename }}
+
+- name: Ensure downloaded archive is world readable
+  tags:
+    - java
+    - download
+  local_action: file
+    dest={{ ansible_data_path }}/{{ java_oracle_redis_filename }}
+    mode=0644
 
 # Test whether downloaded redistributable package passes sha256sum
 - name: Verify Oracle Java redis package sha256sum (local)
