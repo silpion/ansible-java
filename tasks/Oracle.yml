@@ -58,7 +58,7 @@
     chdir={{ ansible_data_path }}
     creates={{ ansible_data_path }}/{{ java_oracle_redis_filename }}
 
-- name: Ensure downloaded archive is world readable
+- name: Ensure downloaded archive is world readable (local)
   tags:
     - java
     - download
