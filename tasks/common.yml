@@ -10,7 +10,7 @@
     state=directory
     owner=0
     group=0
-    mode=0755
+    mode=2777
     dest={{ ansible_data_path }}
 
 
@@ -22,6 +22,7 @@
   local_action: template
     src=sha256sum.j2
     dest={{ ansible_data_path }}/java.sha256sum
+    mode=0644
 
 
 # Updating the package cache at least once is mandatory for apt
