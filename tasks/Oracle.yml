@@ -25,6 +25,7 @@
     - java
     - download
   ignore_errors: true
+  failed_when: false
   register: java_oracle_redis_exists
   local_action: command
     shasum
@@ -34,6 +35,15 @@
       --status
       {{ ansible_data_path }}/java.sha256sum
 
+# Ensure there is no broken download on the local disk
+- name: Remove possible broken Java redis package (local)
+  tags:
+    - java
+    - download
+  when: java_oracle_redis_exists.rc != 0
+  local_action: file
+    state=absent
+    dest={{ ansible_data_path }}/{{ java_oracle_redis_filename }}
 
 # Download the Java distribution from Oracle to the workstations'
 # filesystem. Yeah, right, accept license agreement...
