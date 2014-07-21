@@ -4,7 +4,7 @@ Install Java JRE or JDK with either one of Oracle or OpenJDK
 implementation, or both.
 
 
-# Architecture
+## Architecture
 
 The role downloads redistributable packages from the internet
 to the hosts local filesystem before it may install those on
@@ -14,102 +14,49 @@ Downloads are performed with the command module using curl.
 It is required to have curl installed on the local host you
 are running ansible-playbook on to manage nodes (your workstation).
 
-This dependency is not managed within this role as it feels
-that there is no way to install packages with local_action
-based on ansible_os_family/ansible_distribution when conditionals.
-These facts have values suitable to the managed node but to
-the host running ansible-playbook on.
 
-Please: Proove me wrong!
-
-
-# ToDos
+## ToDos
 
 - Implement support for OpenJDK.
-- (Allow local installation of cURL IF possible.)
 
 
-# Role variables
+## Role variables
 
-## java_default_implementation
+* ``java_default_implementation``: Configure default Java implementation (default: ``oracle``, values: [``oracle``, ``openjdk``])
+* ``java_default_distribution``: Configure default Java distribution (default: ``jdk``, values: [``jdk``, ``jre``])
 
-Configure default Java implementation.
-Choices:
-- oracle
-- openjdk
-Default: oracle
+### OpenJDK
 
+* ``java_openjdk_when``: Run OpenJDK specific automation only when set true (default: ``false``)
+* ``java_openjdk_version_major``: OpenJDK major version (default: "")
+* ``java_openjdk_version_minor``: OpenJDK minor version (default: "")
+* ``java_openjdk_version_patch``: OpenJDK patch version (default: "")
 
-## java_default_distribution
+### Oracle
 
-Configure default Java distribution.
-Choices:
-- jre
-- jdk
-Default: jdk
+* ``java_oracle_when`` Run Oracle specific automation only when set true (default: ``true``)
+* ``java_oracle_version_major``: Oracle major version (default: ``1``)
+* ``java_oracle_version_minor``: Oracle minor version (default: ``7``)
+* ``java_oracle_version_patch``: Oracle patch version (default: ``0``)
+* ``java_oracle_version_build``: Oracle build version (default: ``13``)
 
+Default version information generates ``1.7.0_51-b13`` (7u51-b13) as Oracle Java version.
 
-## java_openjdk_when
-
-
-## java_openjdk_version_*
-
-### java_openjdk_version_major
-
-### java_openjdk_version_minor
-
-### java_openjdk_version_patch
+* ``java_oracle_redis_jdk_sha256sum``: SHA256 sum for the downloaded Oracle Java JDK redistributable package (default: ``77367c3ef36e0930bf3089fb41824f4b8cf55dcc8f43cce0868f7687a474f55c``)
+* ``java_oracle_redis_jre_sha256sum``: SHA256 sum for the downloaded Oracle Java JRE redistributable package (default: ``a8ef4fd8403398f9c2579bb97b5e6643661dabd510e4c3b79529ede9e1f8584a``)
 
 
-## java_oracle_when
-
-Set "true" when Oracle Java implementation should get installed.
-Default: true
-
-
-## java_oracle_version_*
-
-Default: 1.7.0_51-b13 (7u51-b13)
-
-### java_oracle_version_major
-
-Default: 1
-
-### java_oracle_version_minor
-
-Default: 7
-
-### java_oracle_version_patch
-
-Default: 0
-
-### java_oracle_version_build
-
-Default: 13
-
-
-## java_oracle_redis_jdk_sha256sum
-
-SHA256 sum for the downloaded Oracle Java JDK redistributable package.
-Default: 77367c3ef36e0930bf3089fb41824f4b8cf55dcc8f43cce0868f7687a474f55c
-
-## java_oracle_redis_jre_sha256sum
-
-SHA256 sum for the downloaded Oracle Java JRE redistributable package.
-Default:
-
-
-# Dependencies
+## Dependencies
 
 None.
 
 
-# License
+## License
 
 Apache Version 2.0
 
 
-# Author
+## Author
 
 Mark Kusch @mark.kusch silpion.de
 
