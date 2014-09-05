@@ -126,3 +126,21 @@
   when: java_default_implementation == 'oracle'
   set_fact:
     java_home={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
+
+- name: Install Ansible facts.d directory
+  tags: java
+  file:
+    state=directory
+    dest=/etc/ansible/facts.d
+    owner=0
+    group=0
+    mode=0755
+
+- name: Install java facts
+  tags: java
+  template:
+    src=facts.j2
+    dest=/etc/ansible/facts.d/java.ini
+    owner=0
+    group=0
+    mode=0644
