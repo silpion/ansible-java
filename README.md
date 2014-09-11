@@ -46,6 +46,13 @@ Default version information generates ``1.7.0_51-b13`` (7u51-b13) as Oracle Java
 * ``java_oracle_redis_jre_sha256sum``: SHA256 sum for the downloaded Oracle Java JRE redistributable package (default: ``a8ef4fd8403398f9c2579bb97b5e6643661dabd510e4c3b79529ede9e1f8584a``)
 
 
+## Role facts
+
+This role sets runtime and persistent facts for other roles to use.
+
+* ``java_home``: Contains path to the default JVM configured with this role.
+
+
 ## Dependencies
 
 None.
