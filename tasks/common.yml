@@ -2,7 +2,7 @@
 # Common tasks applicable to both Oracle and OpenJDK
 
 # this directory will contain the Java downloads
-- name: Install Java download directory (local)
+- name: Install local ansible data path directory (local)
   tags:
     - java
     - download
