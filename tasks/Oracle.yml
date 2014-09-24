@@ -33,7 +33,7 @@
       --portable
       --check
       --status
-      {{ ansible_data_path }}/java.sha256sum
+      {{ local_ansible_data_path }}/java.sha256sum
 
 # Ensure there is no broken download on the local disk
 - name: Remove possible broken Java redis package (local)
@@ -43,7 +43,7 @@
   when: java_oracle_redis_exists.rc != 0
   local_action: file
     state=absent
-    dest={{ ansible_data_path }}/{{ java_oracle_redis_filename }}
+    dest={{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
 
 # Download the Java distribution from Oracle to the workstations'
 # filesystem. Yeah, right, accept license agreement...
@@ -65,15 +65,15 @@
       --cookie oraclelicense={{ java_oracle_curl_cookie }}
       --cookie-jar /tmp/{{ java_oracle_redis_filename }}.cookie
       {{ java_oracle_redis_mirror }}
-    chdir={{ ansible_data_path }}
-    creates={{ ansible_data_path }}/{{ java_oracle_redis_filename }}
+    chdir={{ local_ansible_data_path }}
+    creates={{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
 
 - name: Ensure downloaded archive is world readable (local)
   tags:
     - java
     - download
   local_action: file
-    dest={{ ansible_data_path }}/{{ java_oracle_redis_filename }}
+    dest={{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
     mode=0644
 
 # Test whether downloaded redistributable package passes sha256sum
@@ -88,7 +88,7 @@
       --portable
       --check
       --status
-      {{ ansible_data_path }}/java.sha256sum
+      {{ local_ansible_data_path }}/java.sha256sum
 
 
 # Directory for unarchiving the configured version of Java.
@@ -102,11 +102,22 @@
     dest={{ java_install_dir }}/oracle
 
 # Install the Oracle redistributable package to the node
+- name: Copy Oracle Java distribution
+  tags: java
+  copy:
+    src={{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
+    dest={{ remote_ansible_data_path }}/{{ java_oracle_redis_filename }}
+    owner=0
+    group=0
+    mode=0644
+
 - name: Install Oracle Java
   tags: java
   unarchive:
-    src={{ ansible_data_path }}/{{ java_oracle_redis_filename }}
+    src={{ remote_ansible_data_path }}/{{ java_oracle_redis_filename }}
     dest={{ java_install_dir }}/oracle/
+    copy=false
+    creates={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
 
 
 # Archives may be packaged with some useless uid and gid
