@@ -62,7 +62,7 @@
       --location
       --insecure
       --remote-name
-      --cookie oraclelicense=accept-securebackup-cookie
+      --cookie oraclelicense={{ java_oracle_curl_cookie }}
       --cookie-jar /tmp/{{ java_oracle_redis_filename }}.cookie
       {{ java_oracle_redis_mirror }}
     chdir={{ ansible_data_path }}
