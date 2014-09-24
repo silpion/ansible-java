@@ -121,12 +121,6 @@
 
 # Setup a custom fact to allow roles depending on Java to configure
 #   JAVA_HOME variable
-- name: Set JAVA_HOME ansible fact
-  tags: java
-  when: java_default_implementation == 'oracle'
-  set_fact:
-    java_home={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
-
 - name: Install Ansible facts.d directory
   tags: java
   file:
