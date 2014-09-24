@@ -3,7 +3,6 @@
 Install Java JRE or JDK with either one of Oracle or OpenJDK
 implementation, or both.
 
-
 ## Architecture
 
 The role downloads redistributable packages from the internet
@@ -14,11 +13,9 @@ Downloads are performed with the command module using curl.
 It is required to have curl installed on the local host you
 are running ansible-playbook on to manage nodes (your workstation).
 
-
 ## ToDos
 
 - Implement support for OpenJDK.
-
 
 ## Role variables
 
@@ -45,23 +42,19 @@ Default version information generates ``1.7.0_51-b13`` (7u51-b13) as Oracle Java
 * ``java_oracle_redis_jdk_sha256sum``: SHA256 sum for the downloaded Oracle Java JDK redistributable package (default: ``77367c3ef36e0930bf3089fb41824f4b8cf55dcc8f43cce0868f7687a474f55c``)
 * ``java_oracle_redis_jre_sha256sum``: SHA256 sum for the downloaded Oracle Java JRE redistributable package (default: ``a8ef4fd8403398f9c2579bb97b5e6643661dabd510e4c3b79529ede9e1f8584a``)
 
-
 ## Role facts
 
 This role sets runtime and persistent facts for other roles to use.
 
 * ``java_home``: Contains path to the default JVM configured with this role.
 
-
 ## Dependencies
 
 None.
 
-
 ## License
 
 Apache Version 2.0
-
 
 ## Author
 
