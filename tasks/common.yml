@@ -16,7 +16,7 @@
 
 # this directory will get copies of large files
 - name: Install remote ansible data path directory
-  tags: teamcity
+  tags: java
   file:
     state=directory
     dest={{ remote_ansible_data_path }}
