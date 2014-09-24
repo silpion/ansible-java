@@ -144,3 +144,8 @@
     owner=0
     group=0
     mode=0644
+
+- name: Re-read facts
+  tags: java
+  setup:
+    filter=ansible_local
