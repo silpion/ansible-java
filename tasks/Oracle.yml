@@ -140,7 +140,7 @@
   tags: java
   template:
     src=facts.j2
-    dest=/etc/ansible/facts.d/java.ini
+    dest=/etc/ansible/facts.d/java.fact
     owner=0
     group=0
     mode=0644
