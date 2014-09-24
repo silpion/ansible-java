@@ -2,7 +2,7 @@
 # Common tasks applicable to both Oracle and OpenJDK
 
 # this directory will contain the Java downloads
-- name: Install Java download directory (local)
+- name: Install local ansible data path directory (local)
   tags:
     - java
     - download
@@ -11,7 +11,15 @@
     owner=0
     group=0
     mode=2777
-    dest={{ ansible_data_path }}
+    dest={{ local_ansible_data_path }}
+
+
+# this directory will get copies of large files
+- name: Install remote ansible data path directory
+  tags: java
+  file:
+    state=directory
+    dest={{ remote_ansible_data_path }}
 
 
 # Test whether we need to download Java.
@@ -21,7 +29,7 @@
     - download
   local_action: template
     src=sha256sum.j2
-    dest={{ ansible_data_path }}/java.sha256sum
+    dest={{ local_ansible_data_path }}/java.sha256sum
     mode=0644
 
 

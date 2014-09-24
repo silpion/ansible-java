@@ -31,6 +31,9 @@ java_openjdk_version_patch:
 #   Should Oracle JDK get installed?
 java_oracle_when: true
 
+#   Cookie data for curl to allow automatic download of Oracle distribution
+java_oracle_curl_cookie: accept-securebackup-cookie
+
 #   Version information
 java_oracle_version_major: '1'
 java_oracle_version_minor: '7'
