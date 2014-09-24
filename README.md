@@ -44,9 +44,12 @@ Default version information generates ``1.7.0_51-b13`` (7u51-b13) as Oracle Java
 
 ## Role facts
 
-This role sets runtime and persistent facts for other roles to use.
+This role sets runtime and persistent facts for other roles to use via
 
-* ``java_home``: Contains path to the default JVM configured with this role.
+* set\_fact ``java_home``
+* facts.d ``ansible_local.java.general.java_home``
+
+This variable contains the path to the default JVM configured with this role.
 
 ## Dependencies
 
