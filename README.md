@@ -35,6 +35,7 @@ are running ansible-playbook on to manage nodes (your workstation).
 * ``java_oracle_version_major``: Oracle major version (default: ``1``)
 * ``java_oracle_version_minor``: Oracle minor version (default: ``7``)
 * ``java_oracle_version_patch``: Oracle patch version (default: ``0``)
+* ``java_oracle_version_update``: Oracle major version (default: ``51``)
 * ``java_oracle_version_build``: Oracle build version (default: ``13``)
 
 Default version information generates ``1.7.0_51-b13`` (7u51-b13) as Oracle Java version.
