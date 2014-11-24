@@ -15,7 +15,3 @@ java_oracle_version_minor: '7'
 java_oracle_version_patch: '0'
 java_oracle_version_update: '51'
 java_oracle_version_build: '13'
-
-#   Redistributable package information
-java_oracle_redis_jdk_filename: "jdk-{{ java_oracle_version_str_redis }}-linux-x64.tar.gz"
-java_oracle_redis_jre_filename: "jre-{{ java_oracle_version_str_redis }}-linux-x64.tar.gz"
