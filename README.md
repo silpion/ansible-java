@@ -1,7 +1,6 @@
 # ansible-java
 
-Install Java JRE or JDK with either one of Oracle or OpenJDK
-implementation, or both.
+Install Oracle Java.
 
 ## Architecture
 
@@ -13,25 +12,12 @@ Downloads are performed with the command module using curl.
 It is required to have curl installed on the local host you
 are running ansible-playbook on to manage nodes (your workstation).
 
-## ToDos
-
-- Implement support for OpenJDK.
-
 ## Role variables
 
-* ``java_default_implementation``: Configure default Java implementation (default: ``oracle``, values: [``oracle``, ``openjdk``])
 * ``java_default_distribution``: Configure default Java distribution (default: ``jdk``, values: [``jdk``, ``jre``])
-
-### OpenJDK
-
-* ``java_openjdk_when``: Run OpenJDK specific automation only when set true (default: ``false``)
-* ``java_openjdk_version_major``: OpenJDK major version (default: "")
-* ``java_openjdk_version_minor``: OpenJDK minor version (default: "")
-* ``java_openjdk_version_patch``: OpenJDK patch version (default: "")
 
 ### Oracle
 
-* ``java_oracle_when`` Run Oracle specific automation only when set true (default: ``true``)
 * ``java_oracle_version_major``: Oracle major version (default: ``1``)
 * ``java_oracle_version_minor``: Oracle minor version (default: ``7``)
 * ``java_oracle_version_patch``: Oracle patch version (default: ``0``)
@@ -45,9 +31,8 @@ Default version information generates ``1.7.0_51-b13`` (7u51-b13) as Oracle Java
 
 ## Role facts
 
-This role sets runtime and persistent facts for other roles to use via
+This role sets persistent facts for other roles to use via
 
-* set\_fact ``java_home``
 * facts.d ``ansible_local.java.general.java_home``
 
 This variable contains the path to the default JVM configured with this role.

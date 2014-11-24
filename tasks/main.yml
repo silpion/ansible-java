@@ -3,25 +3,132 @@
 #
 #   Fail the play if it runs on an unsupported platform,
 - name: Assert platform is supported
-  tags:
-    - java
-    - download
+  tags: java
   assert:
     that:
       - ansible_os_family in ['Debian', 'RedHat']
       - ansible_architecture in ['x86_64']
 
 
-# Install OpenJDK only if specifically activated.
-- include: OpenJDK.yml
-  when: java_openjdk_when
-
-# Install Oracle JDK only if specifically activated.
-- include: Oracle.yml
-  when: java_oracle_when
-
-# Configure the systems default Java implementation if any
-#   implementation has been installed.
-- include: default.yml
+# Overide variables based on known/supported Java versions
+- name: Load version vars
   tags: java
-  when: java_openjdk_when or java_oracle_when
+  with_first_found:
+    - ../vars/versions/{{ java_oracle_version_str_redis }}.yml
+    - ../vars/versions/default.yml
+  include_vars: "{{ item }}"
+
+- name: Assert version vars
+  tags: java
+  assert:
+    that:
+      - java_oracle_redis_{{ java_default_distribution }}_sha256sum not in ("", None)
+
+
+# Manage local download of Oracle Java redistributable
+- include: download.yml
+  tags:
+    - java
+    - download
+
+
+# Install requirements for SELinux to work
+- include: selinux.yml
+  tags: java
+
+
+# Install Oracle Java JDK
+
+# Remote persistent storage path
+- name: Install remote ansible data path directory
+  tags: java
+  file:
+    state=directory
+    dest={{ remote_ansible_data_path }}
+
+# Directory for unarchiving the configured version of Java.
+- name: Install Java base directory
+  tags: java
+  file:
+    state=directory
+    owner=0
+    group=0
+    mode=0755
+    dest={{ java_install_dir }}/oracle
+
+# Install the Oracle redistributable package to the node
+- name: Copy Java distribution
+  tags: java
+  copy:
+    src={{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
+    dest={{ remote_ansible_data_path }}/{{ java_oracle_redis_filename }}
+    owner=0
+    group=0
+    mode=0644
+
+- name: Install Java
+  tags: java
+  unarchive:
+    src={{ remote_ansible_data_path }}/{{ java_oracle_redis_filename }}
+    dest={{ java_install_dir }}/oracle/
+    copy=false
+    creates={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
+
+
+# Archives may be packaged with some useless uid and gid
+- name: Fixup filesystem permissions
+  file:
+    state=directory
+    owner=0
+    group=0
+    recurse=true
+    dest={{ java_install_dir }}
+
+
+# Setup a custom fact to allow roles depending on Java to configure
+#   JAVA_HOME variable
+- name: Set JAVA_HOME ansible fact
+  tags: java
+  set_fact:
+    java_home={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
+
+- name: Install Ansible facts.d directory
+  tags: java
+  file:
+    state=directory
+    dest=/etc/ansible/facts.d
+    owner=0
+    group=0
+    mode=0755
+
+- name: Install java facts
+  tags: java
+  template:
+    src=facts.j2
+    dest=/etc/ansible/facts.d/java.fact
+    owner=0
+    group=0
+    mode=0644
+
+- name: Re-read facts
+  tags: java
+  setup:
+    filter=ansible_local
+
+
+# Configure Java installation as system wide default Java
+- name: Install Java default implementation
+  tags: java
+  template:
+    src=java.sh.j2
+    dest={{ java_install_dir }}/java.sh
+    owner=0
+    group=0
+    mode=0755
+
+- name: Activate Java system environment configuration
+  tags: java
+  file:
+    state=link
+    src={{ java_install_dir }}/java.sh
+    dest=/etc/profile.d/java.sh

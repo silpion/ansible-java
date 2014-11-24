@@ -12,15 +12,6 @@ java_oracle_mirror: 'http://download.oracle.com/otn-pub/java/jdk'
 
 
 # Helper variables for Oracle to keep code readable
-
-#  OpenJDK
-java_openjdk_version_str_redis:
-java_openjdk_version_str_pkg:
-java_openjdk_redis_filename:
-java_openjdk_redis_mirror:
-
-
-#  Oracle
 #   configure a version string Oracle uses from their version information
 java_oracle_version_str_redis: "{{ java_oracle_version_minor }}u{{ java_oracle_version_update }}"
 #   top level directory within the Oracle redis archive
