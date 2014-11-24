@@ -16,6 +16,7 @@
 #   downloading Java.
 - name: Install local ansible data path directory
   tags: java
+  sudo: yes
   local_action: file
     state=directory
     owner=0
@@ -47,9 +48,7 @@
 
 # Ensure there is no broken download on the local disk
 - name: Remove possible broken Java redis package
-  tags:
-    - java
-    - download
+  tags: java
   when: java_oracle_redis_exists.rc != 0
   local_action: file
     state=absent
@@ -62,7 +61,6 @@
 # for every role/node which depends on this role.
 - name: Download Oracle Java redis package
   tags: java
-  sudo: no
   register: java_oracle_redis_download
   when: java_oracle_redis_exists.rc != 0
   local_action: command

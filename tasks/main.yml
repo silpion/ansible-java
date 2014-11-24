@@ -42,6 +42,7 @@
 # Remote persistent storage path
 - name: Install remote ansible data path directory
   tags: java
+  sudo: yes
   file:
     state=directory
     dest={{ remote_ansible_data_path }}
@@ -49,6 +50,7 @@
 # Directory for unarchiving the configured version of Java.
 - name: Install Java base directory
   tags: java
+  sudo: yes
   file:
     state=directory
     owner=0
@@ -59,6 +61,7 @@
 # Install the Oracle redistributable package to the node
 - name: Copy Java distribution
   tags: java
+  sudo: yes
   copy:
     src={{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
     dest={{ remote_ansible_data_path }}/{{ java_oracle_redis_filename }}
@@ -68,6 +71,7 @@
 
 - name: Install Java
   tags: java
+  sudo: yes
   unarchive:
     src={{ remote_ansible_data_path }}/{{ java_oracle_redis_filename }}
     dest={{ java_install_dir }}/oracle/
@@ -77,6 +81,7 @@
 
 # Archives may be packaged with some useless uid and gid
 - name: Fixup filesystem permissions
+  sudo: yes
   file:
     state=directory
     owner=0
@@ -94,6 +99,7 @@
 
 - name: Install Ansible facts.d directory
   tags: java
+  sudo: yes
   file:
     state=directory
     dest=/etc/ansible/facts.d
@@ -103,6 +109,7 @@
 
 - name: Install java facts
   tags: java
+  sudo: yes
   template:
     src=facts.j2
     dest=/etc/ansible/facts.d/java.fact
@@ -119,6 +126,7 @@
 # Configure Java installation as system wide default Java
 - name: Install Java default implementation
   tags: java
+  sudo: yes
   template:
     src=java.sh.j2
     dest={{ java_install_dir }}/java.sh
@@ -128,6 +136,7 @@
 
 - name: Activate Java system environment configuration
   tags: java
+  sudo: yes
   file:
     state=link
     src={{ java_install_dir }}/java.sh

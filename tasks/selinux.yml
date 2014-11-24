@@ -2,14 +2,18 @@
 # Updating the package cache at least once is mandatory for apt
 - name: Update apt package cache
   tags: java
+  sudo: yes
   when: ansible_os_family == 'Debian'
   apt:
     update_cache=yes
     cache_valid_time=3600
 
 - name: Include OS specific vars
+  tags: java
   include_vars: "{{ ansible_os_family }}.yml"
 
 - name: Install Ansible SELinux requirements
+  tags: java
+  sudo: yes
   with_items: java_package_list_selinux
   action: "{{ ansible_pkg_mgr }} state=installed name={{ item }}"
