@@ -1,16 +1,6 @@
-{%- if java_default_implementation == 'oracle' -%}
 {%- if java_default_distribution == 'jdk' -%}
 {{ java_oracle_redis_jdk_sha256sum }} *{{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
 {%- endif -%}
 {% if java_default_distribution == 'jre' -%}
 {{ java_oracle_redis_jre_sha256sum }} *{{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
-{%- endif -%}
-{%- endif -%}
-{%- if java_default_implementation == 'openjdk' -%}
-{%- if java_default_distribution == 'jdk' -%}
-{{ java_openjdk_redis_jdk_sha256sum }} *{{ local_ansible_data_path }}/{{ java_openjdk_redis_filename }}
-{%- endif -%}
-{%- if java_default_distribution == 'jre' -%}
-{{ java_openjdk_redis_jdk_sha256sum }} *{{ local_ansible_data_path }}/{{ java_openjdk_redis_filename }}
-{%- endif -%}
 {%- endif -%}
