@@ -9,6 +9,11 @@
       - ansible_os_family in ['Debian', 'RedHat']
       - ansible_architecture in ['x86_64']
 
+- name: Assert java_default_distribution value
+  tags: java
+  assert:
+    that:
+      - java_default_distribution in ('jre', 'jdk')
 
 # Overide variables based on known/supported Java versions
 - name: Load version vars
@@ -22,7 +27,8 @@
   tags: java
   assert:
     that:
-      - java_oracle_redis_{{ java_default_distribution }}_sha256sum not in ("", None)
+      - java_oracle_redis_{{ java_default_distribution }}_sha256sum not in (None, "")
+      - java_oracle_redis_jce_sha256sum not in (None, "")
 
 
 # Manage local download of Oracle Java redistributable
@@ -35,6 +41,13 @@
 # Install requirements for SELinux to work
 - include: selinux.yml
   tags: java
+
+
+- name: Install required packages
+  tags: java
+  sudo: yes
+  with_items: java_package_list
+  action: "{{ ansible_pkg_mgr }} state=installed name={{ item }}"
 
 
 # Install Oracle Java JDK
@@ -59,12 +72,13 @@
     dest={{ java_install_dir }}/oracle
 
 # Install the Oracle redistributable package to the node
-- name: Copy Java distribution
+- name: Copy Java redistributable packages
   tags: java
   sudo: yes
+  with_items: ["{{ java_oracle_redis_filename }}", "{{ java_oracle_redis_jce_filename }}"]
   copy:
-    src={{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
-    dest={{ remote_ansible_data_path }}/{{ java_oracle_redis_filename }}
+    src={{ local_ansible_data_path }}/{{ item }}
+    dest={{ remote_ansible_data_path }}/{{ item }}
     owner=0
     group=0
     mode=0644
@@ -77,6 +91,43 @@
     dest={{ java_install_dir }}/oracle/
     copy=false
     creates={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
+
+- name: Unarchive Java JCE package
+  tags: java
+  unarchive:
+    src={{ remote_ansible_data_path }}/{{ java_oracle_redis_jce_filename }}
+    dest=/tmp/
+    copy=false
+    creates=/tmp/{{ java_oracle_redis_jce_archive_dirname }}
+
+
+- name: Install Java JCE policies to JRE
+  tags: java
+  sudo: yes
+  when: java_default_distribution == 'jre'
+  with_items:
+    - local_policy.jar
+    - US_export_policy.jar
+  command: install
+      --owner root
+      --group root
+      --mode 0644
+      /tmp/{{ java_oracle_redis_jce_archive_dirname }}/{{ item }}
+      {{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}/lib/security/{{ item }}
+
+- name: Install Java JCE policies to JDK
+  tags: java
+  sudo: yes
+  when: java_default_distribution == 'jdk'
+  with_items:
+    - local_policy.jar
+    - US_export_policy.jar
+  command: install
+      --owner root
+      --group root
+      --mode 0644
+      /tmp/{{ java_oracle_redis_jce_archive_dirname }}/{{ item }}
+      {{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}/jre/lib/security/{{ item }}
 
 
 # Archives may be packaged with some useless uid and gid
