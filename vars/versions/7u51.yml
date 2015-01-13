@@ -1,3 +1,7 @@
 ---
 java_oracle_redis_jdk_sha256sum: '77367c3ef36e0930bf3089fb41824f4b8cf55dcc8f43cce0868f7687a474f55c'
 java_oracle_redis_jre_sha256sum: 'a8ef4fd8403398f9c2579bb97b5e6643661dabd510e4c3b79529ede9e1f8584a'
+java_oracle_redis_jce_sha256sum: '7a8d790e7bd9c2f82a83baddfae765797a4a56ea603c9150c87b7cdb7800194d'
+java_oracle_mirror_jce: "{{ java_oracle_mirror_base }}/jce/7"
+java_oracle_redis_jce_filename: UnlimitedJCEPolicyJDK7.zip
+java_oracle_redis_jce_archive_dirname: UnlimitedJCEPolicy
