@@ -1,3 +1,8 @@
+# 0.6.0
+
+Mark Kusch (2):
+      Add support to install JCE policy for unlimited strength cryptography
+
 # 0.5.1
 
 Mark Kusch (9):
