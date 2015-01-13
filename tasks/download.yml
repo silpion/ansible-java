@@ -26,11 +26,16 @@
 
 
 # Downloaded archives are verified with shasum command
-- name: Install Java redis package sha256sum
+- name: Install Java redis packages sha256sum files
   tags: java
+  with_items:
+    - java.sha256sum
+    - java_jce.sha256sum
   local_action: template
-    src=sha256sum.j2
-    dest={{ local_ansible_data_path }}/java.sha256sum
+    src={{ item }}.j2
+    dest={{ local_ansible_data_path }}/{{ item }}
+    mode=0644
+
 
 # Test whether we need to download Java (again).
 - name: Verify Java redis package sha256sum
@@ -46,6 +51,20 @@
       --status
       {{ local_ansible_data_path }}/java.sha256sum
 
+- name: Verify Java JCE redis package sha256sum
+  tags: java
+  ignore_errors: true
+  failed_when: false
+  register: java_oracle_redis_jce_exists
+  local_action: command
+    shasum
+      --algorithm 256
+      --portable
+      --check
+      --status
+      {{ local_ansible_data_path }}/java_jce.sha256sum
+
+
 # Ensure there is no broken download on the local disk
 - name: Remove possible broken Java redis package
   tags: java
@@ -53,6 +72,14 @@
   local_action: file
     state=absent
     dest={{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
+
+- name: Remove possible broken Java JCE redis package
+  tags: java
+  when: java_oracle_redis_jce_exists.rc != 0
+  local_action: file
+    state=absent
+    dest={{ local_ansible_data_path }}/{{ java_oracle_redis_jce_filename }}
+
 
 # Download the Java distribution from Oracle to the workstations'
 # filesystem. Yeah, right, accept license agreement...
@@ -74,11 +101,27 @@
     chdir={{ local_ansible_data_path }}
     creates={{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
 
-# Fixup possible users umask issues
-- name: Ensure downloaded archive is world readable
+- name: Download Oracle Java JCE redis package
   tags: java
+  register: java_oracle_redis_jce_download
+  when: java_oracle_redis_jce_exists.rc != 0
+  local_action: command
+    curl
+      --location
+      --insecure
+      --remote-name
+      --cookie oraclelicense={{ java_oracle_curl_cookie }}
+      --cookie-jar /tmp/{{ java_oracle_redis_filename }}.cookie
+      {{ java_oracle_mirror_jce }}/{{ java_oracle_redis_jce_filename }}
+    chdir={{ local_ansible_data_path }}
+    creates={{ local_ansible_data_path }}/{{ java_oracle_redis_jce_filename }}
+
+# Fixup possible users umask issues
+- name: Ensure downloaded archives are world readable
+  tags: java
+  with_items: ["{{ java_oracle_redis_filename }}", "{{ java_oracle_redis_jce_filename }}"]
   local_action: file
-    dest={{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
+    dest={{ local_ansible_data_path }}/{{ item }}
     mode=0644
 
 # Test whether downloaded redistributable package passes sha256sum
@@ -92,3 +135,14 @@
       --check
       --status
       {{ local_ansible_data_path }}/java.sha256sum
+
+- name: Verify Java JCE redis package sha256sum
+  tags: java
+  when: java_oracle_redis_jce_download|changed
+  local_action: command
+    shasum
+      --algorithm 256
+      --portable
+      --check
+      --status
+      {{ local_ansible_data_path }}/java_jce.sha256sum
