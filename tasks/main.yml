@@ -19,7 +19,7 @@
 - name: Load version vars
   tags: java
   with_first_found:
-    - ../vars/versions/{{ java_oracle_version_str_redis }}.yml
+    - ../vars/versions/{{ java_oracle_version }}.yml
     - ../vars/versions/default.yml
   include_vars: "{{ item }}"
 
