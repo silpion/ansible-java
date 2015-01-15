@@ -4,7 +4,7 @@
 #   Choices:
 #   - jdk
 #   - jre
-java_default_distribution: 'jdk'
+java_oracle_distribution: 'jdk'
 
 #   Cookie data for curl to allow automatic download of Oracle distribution
 java_oracle_curl_cookie: accept-securebackup-cookie

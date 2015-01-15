@@ -14,7 +14,7 @@ are running ansible-playbook on to manage nodes (your workstation).
 
 ## Role variables
 
-* ``java_default_distribution``: Configure default Java distribution (default: ``jdk``, values: [``jdk``, ``jre``])
+* ``java_oracle_distribution``: Configure the Java distribution to be installed (default: ``jdk``, values: [``jdk``, ``jre``])
 * ``java_oracle_version``: Configure Java version to be installed (string, default: ``8u25``)
 
 ### Versioned variables
@@ -28,8 +28,8 @@ the *vars/versions* directory. When configuring a version, that is not predefine
 * ``java_oracle_version_patch``: Oracle patch version
 * ``java_oracle_version_update``: Oracle major version
 * ``java_oracle_version_build``: Oracle build version
-* ``java_oracle_redis_jdk_sha256sum``: SHA256 sum for the downloaded Oracle Java JDK redistributable package - mandatory when ``java_default_distribution`` is ``jdk``
-* ``java_oracle_redis_jre_sha256sum``: SHA256 sum for the downloaded Oracle Java JRE redistributable package - mandatory when ``java_default_distribution`` is ``jre``
+* ``java_oracle_redis_jdk_sha256sum``: SHA256 sum for the downloaded Oracle Java JDK redistributable package - mandatory when ``java_oracle_distribution`` is ``jdk``
+* ``java_oracle_redis_jre_sha256sum``: SHA256 sum for the downloaded Oracle Java JRE redistributable package - mandatory when ``java_oracle_distribution`` is ``jre``
 * ``java_oracle_redis_jce_sha256sum``: SHA256 sum for the downloaded Oracle Java JCE policies package
 * ``java_oracle_mirror_jce``: Mirror URL for the download of the Oracle Java JCE policies package
 * ``java_oracle_redis_jce_filename``:  File name of the Oracle Java JCE policies package
