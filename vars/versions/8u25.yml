@@ -1,4 +1,10 @@
 ---
+java_oracle_version_major: '1'
+java_oracle_version_minor: '8'
+java_oracle_version_patch: '0'
+java_oracle_version_update: '25'
+java_oracle_version_build: '17'
+
 java_oracle_redis_jdk_sha256sum: '057f660799be2307d2eefa694da9d3fce8e165807948f5bcaa04f72845d2f529'
 java_oracle_redis_jre_sha256sum: 'fbf3b9ddd4ae534ead10411bc425a0faf460118aadff480bca366888c1cf879f'
 java_oracle_redis_jce_sha256sum: 'f3020a3922efd6626c2fff45695d527f34a8020e938a49292561f18ad1320b59'
