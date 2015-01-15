@@ -2,6 +2,23 @@
 
 Install Oracle Java.
 
+## Compatibility
+
+### ansible-java 0.7.0
+
+Starting with this role version, inventory configuration for pinned
+versions of Java to be installed has changed.
+To pin a version it is enough to configure ``java_oracle_version``
+which requires ``vars/versions/{{ java_oracle_version }}.yml`` to be
+configured.
+
+Starting with this role version the variable to choos between JDK or
+JRE has been renamed to ``java_oracle_distribution`` for consistency
+reasons.
+
+Starting with this role version the default Java version has been
+updated to Java8.
+
 ## Architecture
 
 The role downloads redistributable packages from the internet
