@@ -9,17 +9,17 @@
       - ansible_os_family in ['Debian', 'RedHat']
       - ansible_architecture in ['x86_64']
 
-- name: Assert java_default_distribution value
+- name: Assert java_oracle_distribution value
   tags: java
   assert:
     that:
-      - java_default_distribution in ('jre', 'jdk')
+      - java_oracle_distribution in ('jre', 'jdk')
 
 # Overide variables based on known/supported Java versions
 - name: Load version vars
   tags: java
   with_first_found:
-    - ../vars/versions/{{ java_oracle_version_str_redis }}.yml
+    - ../vars/versions/{{ java_oracle_version }}.yml
     - ../vars/versions/default.yml
   include_vars: "{{ item }}"
 
@@ -27,7 +27,7 @@
   tags: java
   assert:
     that:
-      - java_oracle_redis_{{ java_default_distribution }}_sha256sum not in (None, "")
+      - java_oracle_redis_{{ java_oracle_distribution }}_sha256sum not in (None, "")
       - java_oracle_redis_jce_sha256sum not in (None, "")
 
 
@@ -104,7 +104,7 @@
 - name: Install Java JCE policies to JRE
   tags: java
   sudo: yes
-  when: java_default_distribution == 'jre'
+  when: java_oracle_distribution == 'jre'
   with_items:
     - local_policy.jar
     - US_export_policy.jar
@@ -118,7 +118,7 @@
 - name: Install Java JCE policies to JDK
   tags: java
   sudo: yes
-  when: java_default_distribution == 'jdk'
+  when: java_oracle_distribution == 'jdk'
   with_items:
     - local_policy.jar
     - US_export_policy.jar

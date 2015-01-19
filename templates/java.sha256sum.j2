@@ -1,6 +1,6 @@
-{%- if java_default_distribution == 'jdk' -%}
+{%- if java_oracle_distribution == 'jdk' -%}
 {{ java_oracle_redis_jdk_sha256sum }} *{{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
 {%- endif -%}
-{% if java_default_distribution == 'jre' -%}
+{% if java_oracle_distribution == 'jre' -%}
 {{ java_oracle_redis_jre_sha256sum }} *{{ local_ansible_data_path }}/{{ java_oracle_redis_filename }}
 {%- endif -%}

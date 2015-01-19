@@ -23,10 +23,10 @@ java_oracle_redis_jdk_filename: "jdk-{{ java_oracle_version_str_redis }}-linux-x
 java_oracle_redis_jre_filename: "jre-{{ java_oracle_version_str_redis }}-linux-x64.tar.gz"
 
 #   top level directory within the Oracle redis archive
-java_oracle_version_str_pkg: "{{ java_default_distribution }}{{ java_oracle_version_major }}.{{ java_oracle_version_minor }}.0_{{ java_oracle_version_update }}"
+java_oracle_version_str_pkg: "{{ java_oracle_distribution }}{{ java_oracle_version_major }}.{{ java_oracle_version_minor }}.0_{{ java_oracle_version_update }}"
 
 #   source file name for either the JRE or JDK for the Oracle Java implementation
-java_oracle_redis_filename: "{{ java_default_distribution }}-{{ java_oracle_version_str_redis }}-linux-x64.tar.gz"
+java_oracle_redis_filename: "{{ java_oracle_distribution }}-{{ java_oracle_version_str_redis }}-linux-x64.tar.gz"
 
 #   complete URL for downloading either the JRE or JDK for the Oracle Java implementation
 java_oracle_redis_mirror: "{{ java_oracle_mirror }}/{{ java_oracle_version_minor }}u{{ java_oracle_version_update }}-b{{ java_oracle_version_build }}/{{ java_oracle_redis_filename }}"
