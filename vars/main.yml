@@ -4,10 +4,6 @@ local_ansible_data_path: /usr/local/src/ansible/data
 remote_ansible_data_path: "{{ local_ansible_data_path }}"
 
 
-# base installation directory for any Java implementation/distribution
-java_install_dir: /opt/java
-
-
 # Where to download Oracle Java implementation from
 java_oracle_mirror_base: 'http://download.oracle.com/otn-pub/java'
 java_oracle_mirror: "{{ java_oracle_mirror_base }}/jdk"

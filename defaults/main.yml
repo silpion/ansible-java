@@ -11,3 +11,6 @@ java_oracle_curl_cookie: accept-securebackup-cookie
 
 #   Version information
 java_oracle_version: 8u25
+
+# Base installation directory for any Java implementation/distribution
+java_install_dir: /opt/java
