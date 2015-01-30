@@ -33,6 +33,7 @@ are running ansible-playbook on to manage nodes (your workstation).
 
 * ``java_oracle_distribution``: Configure the Java distribution to be installed (default: ``jdk``, values: [``jdk``, ``jre``])
 * ``java_oracle_version``: Configure Java version to be installed (string, default: ``8u25``)
+* ``java_install_dir``: Base installation directory for any Java implementation/distribution (string, default: ``/opt/java``)
 
 ### Versioned variables
 

@@ -1,3 +1,11 @@
+# 0.8.0
+
+Marc Rohlfs (3):
+
+* Variables that should be overwritable must be moved to defaults/main.yml.
+* Replaced hard coded patch version with proper variable substitution.
+* Added version var definition for latest Java version 8u31 and set it as role default.
+
 # 0.7.0
 
 Mark Kusch (1):
