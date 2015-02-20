@@ -12,7 +12,7 @@ To pin a version it is enough to configure ``java_oracle_version``
 which requires ``vars/versions/{{ java_oracle_version }}.yml`` to be
 configured.
 
-Starting with this role version the variable to choos between JDK or
+Starting with this role version the variable to choose between JDK or
 JRE has been renamed to ``java_oracle_distribution`` for consistency
 reasons.
 
@@ -70,7 +70,17 @@ This variable contains the path to the default JVM configured with this role.
 
 ## Dependencies
 
-None.
+This role depends on ``groover.util`` role. This is configured
+for ``ansible-galaxy install`` in **requirements.yml**.
+
+**NOTE**: Requirements are installed as virtual user ``silpion``
+(``silpion.util``)
+
+Be sure to install required roles with
+
+    ansible-galaxy install --role-file requirements.yml
+
+* [groover.util](https://github.com/silpion/ansible-util)
 
 ## License
 
@@ -79,6 +89,14 @@ Apache Version 2.0
 ## Author
 
 Mark Kusch @mark.kusch silpion.de
+Marc Rohlfs @marc.rohlfs silpion.de
+
+### Contributors
+
+* Lars Maehlmann @lars.maehlmann silpion.de
+* Sebastian Davids @sebastian.davids silpion.de
+* [ludovicc](https://github.com/ludovicc)
+* [nixlike](https://github.com/nixlike)
 
 
 <!-- vim: set ts=4 sw=4 et nofen: -->
