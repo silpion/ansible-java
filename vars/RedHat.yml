@@ -1,5 +1,3 @@
 ---
 java_package_list:
   - unzip
-java_package_list_selinux:
-  - libselinux-python
