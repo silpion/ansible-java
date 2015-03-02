@@ -1,3 +1,13 @@
+# 0.9.0
+
+Mark Kusch (5):
+
+* Qualify galaxy meta data
+* Allow ansible-galaxy install to install required dependencies
+* Documentation for groover.util role dependency
+* Implement util_template_use_cow variable to templates
+* Use capabilities of groover.util role
+
 # 0.8.0
 
 Marc Rohlfs (3):
