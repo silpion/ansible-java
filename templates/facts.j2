@@ -1,3 +1,4 @@
+{% if util_template_use_cow %}
 #  --------------------
 # ( Managed by Ansible )
 #  --------------------
@@ -11,6 +12,9 @@
 #                 (@@@@@@@@)
 #                 `YY~~~~YY'
 #                  ||    ||
+{% else %}
+# {{ ansible_managed }}
+{% endif %}
 
 [general]
 java_home={{ java_home }}
