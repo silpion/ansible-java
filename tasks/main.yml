@@ -30,17 +30,16 @@
       - java_oracle_redis_{{ java_oracle_distribution }}_sha256sum not in (None, "")
       - java_oracle_redis_jce_sha256sum not in (None, "")
 
+- name: Include OS specific vars
+  tags: java
+  include_vars: "{{ ansible_os_family }}.yml"
+
 
 # Manage local download of Oracle Java redistributable
 - include: download.yml
   tags:
     - java
     - download
-
-
-# Install requirements for SELinux to work
-- include: selinux.yml
-  tags: java
 
 
 - name: Install required packages
@@ -51,14 +50,6 @@
 
 
 # Install Oracle Java JDK
-
-# Remote persistent storage path
-- name: Install remote ansible data path directory
-  tags: java
-  sudo: yes
-  file:
-    state=directory
-    dest={{ remote_ansible_data_path }}
 
 # Directory for unarchiving the configured version of Java.
 - name: Install Java base directory
@@ -77,8 +68,8 @@
   sudo: yes
   with_items: ["{{ java_oracle_redis_filename }}", "{{ java_oracle_redis_jce_filename }}"]
   copy:
-    src={{ local_ansible_data_path }}/{{ item }}
-    dest={{ remote_ansible_data_path }}/{{ item }}
+    src={{ util_persistent_data_path_local }}/{{ item }}
+    dest={{ util_persistent_data_path_remote }}/{{ item }}
     owner=0
     group=0
     mode=0644
@@ -87,7 +78,7 @@
   tags: java
   sudo: yes
   unarchive:
-    src={{ remote_ansible_data_path }}/{{ java_oracle_redis_filename }}
+    src={{ util_persistent_data_path_remote }}/{{ java_oracle_redis_filename }}
     dest={{ java_install_dir }}/oracle/
     copy=false
     creates={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
@@ -95,7 +86,7 @@
 - name: Unarchive Java JCE package
   tags: java
   unarchive:
-    src={{ remote_ansible_data_path }}/{{ java_oracle_redis_jce_filename }}
+    src={{ util_persistent_data_path_remote }}/{{ java_oracle_redis_jce_filename }}
     dest=/tmp/
     copy=false
     creates=/tmp/{{ java_oracle_redis_jce_archive_dirname }}
@@ -168,7 +159,7 @@
     group=0
     mode=0644
 
-- name: Re-read facts
+- name: Re-read local facts
   tags: java
   setup:
     filter=ansible_local
