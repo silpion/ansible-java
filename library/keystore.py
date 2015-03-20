@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 # TODO implement certificate private keys
-# TODO implement creates= argument
 # TODO implement copy={true,false}
 # TODO truststore vs keystore
 
@@ -32,6 +31,16 @@ options:
     required: true
     default: None
     aliases: ['dest']
+  copy:
+    description:
+      - 'Whether to copy certificates to the managed node. (NOT IMPLEMENTED YET)'
+    required: false
+    default: true
+  create:
+    description:
+      - 'Whether to create a new keystore if it does not exist.'
+    required: false
+    default: true
   alias:
     description:
       - 'Alias name or ID for the certificate inside the keystore.'
@@ -74,6 +83,8 @@ class Keystore(object):
         self.module = module
         self.state = module.params['state']
         self.path = os.path.expanduser(module.params['path'])
+        self.copy = module.boolean(module.params['copy'])
+        self.create = module.boolean(module.params['create'])
         self.alias = module.params['alias']
         self.crt = module.params['crt']
         self.key = module.params['key']
@@ -81,9 +92,11 @@ class Keystore(object):
         self.password = module.params['password']
         self.file_args = module.load_file_common_arguments(module.params)
 
+    def exists(self):
+        return os.path.isfile(self.path)
 
     def is_crt(self):
-        if os.path.isfile(self.path):
+        if self.exists():
             cmd = [self.keytool]
             cmd.append('-noprompt')
             cmd.append('-list')
@@ -140,6 +153,8 @@ def main():
         argument_spec = dict(
             state = dict(default='present', choices=['present', 'absent'], type='str'),
             path = dict(aliases=['dest'], required=True, type='str'),
+            copy = dict(default=True, choices=BOOLEANS),
+            create = dict(default=True, choices=BOOLEANS),
             alias = dict(aliases=['name'], required=True, type='str'),
             crt = dict(required=False, default=None, type='str'),
             key = dict(required=False, default=None, type='str'),
@@ -175,10 +190,18 @@ def main():
     elif keystore.state == 'present':
         if not keystore.is_crt():
             if module.check_mode:
-                module.exit_json(changed=True)
+                if not keystore.exists() and not keystore.create:
+                    module.exit_json(changed=False, msg='Not creating new keystore (use create=yes)')
+                else:
+                    module.exit_json(changed=True)
+
+            if not keystore.exists() and not keystore.create:
+                module.exit_json(changed=False, msg='Not creating new keystore (use create=yes)')
+
             (rc, out, err) = keystore.crt_add()
             if rc != 0:
                 module.fail_json(name=keystore.alias, msg=err)
+
 
     rc = keystore.set_fs_attributes_if_different(rc)
 
