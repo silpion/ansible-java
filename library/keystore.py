@@ -3,6 +3,8 @@
 
 # TODO implement certificate private keys
 # TODO implement creates= argument
+# TODO implement copy={true,false}
+# TODO truststore vs keystore
 
 import sys
 import os
