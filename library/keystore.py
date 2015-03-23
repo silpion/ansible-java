@@ -1,23 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# TODO implement certificate private keys
-# TODO implement copy={true,false}
-# TODO truststore vs keystore
-
-import sys
-import os
-
-try:
-    import selinux
-    HAVE_SELINUX=True
-except ImportError:
-    HAVE_SELINUX=False
 
 DOCUMENTATION = '''
 ---
 module: keystore
 short_description: Manage certificates with Java jks keystore
+extends_documentation_fragment: files
+description:
+  - The M(keystore) module allows to install and uninstall certificates in a Java keystore with keytool
 options:
   state:
     description:
@@ -27,68 +18,69 @@ options:
     choices: [present, absent]
   path:
     description:
-      - 'Path to the keystore file beeing managed. Aliases: I(dest)'
+      - Path to the keystore file beeing managed. Aliases: I(dest)
     required: true
     default: None
-    aliases: ['dest']
-  copy:
-    description:
-      - 'Whether to copy certificates to the managed node. (NOT IMPLEMENTED YET)'
-    required: false
-    default: true
+    aliases: ['dest', 'name']
   create:
     description:
-      - 'Whether to create a new keystore if it does not exist.'
+      - Whether to create a new keystore if it does not exist.
     required: false
     default: true
   alias:
     description:
-      - 'Alias name or ID for the certificate inside the keystore.'
+      - Alias name or ID for the certificate inside the keystore.
     required: true
     default: None
-    aliases: ['name']
   crt:
     description:
-      - 'Path to a file containing the SSL certificate, mandatory when state=present'
-    required: false
-    default: None
-  key:
-    description:
-      - 'Path to a file containing a SSL certificate key'
+      - Path to a file containing the SSL certificate, mandatory when state=present
     required: false
     default: None
   password:
     description:
-      - 'Password for the keystore'
+      - Password for the keystore
     required: true
     default: None
   keytool:
     description:
-      - 'Path to a Java keytool for performing operations'
-    required: true
+      - Path to a Java keytool for performing operations (required when keytool not in PATH)
+    required: false
     default: None
 # informational: requirements for nodes
 requirements: []
 author: Mark Kusch
+todo:
+  - copy={true,false} parameter (action_plugins/keystore.py)
+  - creates='str' parameter (action_plugins/keystore.py)
+  - implementation for truststore vs keystore
+  - whether to install pkcs12 and convert to jks with openssl
+notes:
+  - requires keytool either in $PATH or supplied with keytool= argument
+  - does not allow to install private keys
 '''
+
 
 EXAMPLES = '''
 - keystore: state=present path=/etc/app/cacerts owner=foo group=foo mode=0644 alias=foo crt=/tmp/app.crt
 - keystore: state=absent dest=/etc/app/cacerts alias=bar
 '''
 
+
+import sys
+import os
+
+
 class Keystore(object):
 
-    def __init__(self, module):
+    def __init__(self, module, keytool):
         self.module = module
         self.state = module.params['state']
         self.path = os.path.expanduser(module.params['path'])
-        self.copy = module.boolean(module.params['copy'])
         self.create = module.boolean(module.params['create'])
         self.alias = module.params['alias']
-        self.crt = module.params['crt']
-        self.key = module.params['key']
-        self.keytool = module.params['keytool']
+        self.crt = os.path.expanduser(module.params['crt'])
+        self.keytool = keytool
         self.password = module.params['password']
         self.file_args = module.load_file_common_arguments(module.params)
 
@@ -152,30 +144,34 @@ def main():
     module = AnsibleModule(
         argument_spec = dict(
             state = dict(default='present', choices=['present', 'absent'], type='str'),
-            path = dict(aliases=['dest'], required=True, type='str'),
-            copy = dict(default=True, choices=BOOLEANS),
+            path = dict(aliases=['name', 'dest'], required=True, type='str'),
             create = dict(default=True, choices=BOOLEANS),
-            alias = dict(aliases=['name'], required=True, type='str'),
+            alias = dict(required=True, type='str'),
             crt = dict(required=False, default=None, type='str'),
-            key = dict(required=False, default=None, type='str'),
-            keytool = dict(required=True, default=None, type='str'),
+            keytool = dict(required=False, default=None, type='str'),
             password = dict(required=True, default=None, type='str'),
         ),
         add_file_common_args=True,
         supports_check_mode=True
     )
 
-    keystore = Keystore(module)
+
+    keytool = None
+    keytool = module.get_bin_path('keytool', False)
+    if keytool is None and module.params['keytool'] is not None:
+        if os.path.isfile(module.params['keytool']) and os.access(module.params['keytool'], os.X_OK):
+            keytool = module.params['keytool']
+    if keytool is None:
+        module.fail_json(msg='cannot execute keytool: no such file or directory')
+
+
+    keystore = Keystore(module, keytool)
     rc = None
     out = ''
     err = ''
     result = {}
     result['path'] = keystore.path
     result['state'] = keystore.state
-
-
-    if not os.path.isfile(keystore.keytool) or not os.access(keystore.keytool, os.X_OK):
-        module.fail_json(msg='cannot execute keytool at %s' % str(keystore.keytool))
 
 
     if keystore.state == 'absent':
@@ -189,15 +185,10 @@ def main():
 
     elif keystore.state == 'present':
         if not keystore.is_crt():
-            if module.check_mode:
-                if not keystore.exists() and not keystore.create:
-                    module.exit_json(changed=False, msg='Not creating new keystore (use create=yes)')
-                else:
-                    module.exit_json(changed=True)
-
             if not keystore.exists() and not keystore.create:
                 module.exit_json(changed=False, msg='Not creating new keystore (use create=yes)')
-
+            if module.check_mode:
+                module.exit_json(changed=True)
             (rc, out, err) = keystore.crt_add()
             if rc != 0:
                 module.fail_json(name=keystore.alias, msg=err)
