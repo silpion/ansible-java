@@ -59,6 +59,8 @@ the *vars/versions* directory. When configuring a version, that is not predefine
 * 7u71
 * 8u20
 * 8u25
+* 8u31
+* 8u45
 
 ## Role facts
 
@@ -97,6 +99,7 @@ Marc Rohlfs @marc.rohlfs silpion.de
 * Sebastian Davids @sebastian.davids silpion.de
 * [ludovicc](https://github.com/ludovicc)
 * [nixlike](https://github.com/nixlike)
+* [trumant](https://github.com/trumant)
 
 
 <!-- vim: set ts=4 sw=4 et nofen: -->
