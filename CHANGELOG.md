@@ -1,3 +1,15 @@
+# 0.10.0
+
+Travis Truman (1):
+
+* Adding vars for 8u45
+
+Mark Kusch (3):
+
+* Add example playbook and contribution documentation
+* Add supported versions to documentation and add trumant to contributors list
+* Default Java to 8u45
+
 # 0.9.0
 
 Mark Kusch (5):
