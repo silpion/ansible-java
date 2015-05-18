@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# (c) Mark Kusch <mark.kusch@silpion.de>
+
 
 DOCUMENTATION = '''
 ---
@@ -47,12 +49,18 @@ options:
       - Path to a Java keytool for performing operations (required when keytool not in PATH)
     required: false
     default: None
+  copy:
+    description:
+      - Whether to copy files to the remote host
+    required: false
+    default: True
+  creates:
+    description:
+      - A filename, when it already exists, this step will B(not) be run.
 # informational: requirements for nodes
 requirements: []
 author: Mark Kusch
 todo:
-  - copy={true,false} parameter (action_plugins/keystore.py)
-  - creates='str' parameter (action_plugins/keystore.py)
   - implementation for truststore vs keystore
   - whether to install pkcs12 and convert to jks with openssl
 notes:
@@ -82,6 +90,8 @@ class Keystore(object):
         self.crt = os.path.expanduser(module.params['crt'])
         self.keytool = keytool
         self.password = module.params['password']
+        self.copy = module.boolean(module.params['copy'])
+        self.creates = module.params['creates']
         self.file_args = module.load_file_common_arguments(module.params)
 
     def exists(self):
@@ -150,6 +160,8 @@ def main():
             crt = dict(required=False, default=None, type='str'),
             keytool = dict(required=False, default=None, type='str'),
             password = dict(required=True, default=None, type='str'),
+            copy = dict(required=False, choices=BOOLEANS, default=True),
+            creates = dict(required=False, default=None, type='str'),
         ),
         add_file_common_args=True,
         supports_check_mode=True
@@ -174,6 +186,13 @@ def main():
     result['state'] = keystore.state
 
 
+    if not os.path.exists(keystore.crt):
+        if keystore.copy:
+            module.fail_json(msg="File '%s' failed to transfer" % os.path.basename(keystore.crt))
+    if not os.access(keystore.crt, os.R_OK):
+        module.fail_json(msg="File '%s' is not readable" % os.path.basename(keystore.crt))
+
+
     if keystore.state == 'absent':
         if keystore.is_crt():
             if module.check_mode:
@@ -194,7 +213,7 @@ def main():
                 module.fail_json(name=keystore.alias, msg=err)
 
 
-    rc = keystore.set_fs_attributes_if_different(rc)
+    keystore.set_fs_attributes_if_different(rc)
 
     if rc is None:
         result['changed'] = False
