@@ -46,7 +46,7 @@
   tags: java
   become: yes
   with_items: java_package_list
-  action: "{{ ansible_pkg_mgr }} state=installed name={{ item }}"
+  action: "{{ ansible_pkg_mgr }} state={{ util_package_state }} name={{ item }}"
 
 
 # Install Oracle Java JDK
