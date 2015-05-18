@@ -15,8 +15,6 @@
 # Downloaded archives are verified with shasum command
 - name: Install Java redis packages sha256sum files
   tags: java
-  sudo: "{{ util_local_action_sudo_enable }}"
-  sudo_user: "{{ util_local_action_sudo_user|default(omit) }}"
   with_items:
     - java.sha256sum
     - java_jce.sha256sum
@@ -29,8 +27,6 @@
 # Test whether we need to download Java (again).
 - name: Verify Java redis package sha256sum
   tags: java
-  sudo: "{{ util_local_action_sudo_enable }}"
-  sudo_user: "{{ util_local_action_sudo_user|default(omit) }}"
   ignore_errors: true
   failed_when: false
   register: java_oracle_redis_exists
@@ -44,8 +40,6 @@
 
 - name: Verify Java JCE redis package sha256sum
   tags: java
-  sudo: "{{ util_local_action_sudo_enable }}"
-  sudo_user: "{{ util_local_action_sudo_user|default(omit) }}"
   ignore_errors: true
   failed_when: false
   register: java_oracle_redis_jce_exists
@@ -61,8 +55,6 @@
 # Ensure there is no broken download on the local disk
 - name: Remove possible broken Java redis package
   tags: java
-  sudo: "{{ util_local_action_sudo_enable }}"
-  sudo_user: "{{ util_local_action_sudo_user|default(omit) }}"
   when: java_oracle_redis_exists.rc != 0
   local_action: file
     state=absent
@@ -70,8 +62,6 @@
 
 - name: Remove possible broken Java JCE redis package
   tags: java
-  sudo: "{{ util_local_action_sudo_enable }}"
-  sudo_user: "{{ util_local_action_sudo_user|default(omit) }}"
   when: java_oracle_redis_jce_exists.rc != 0
   local_action: file
     state=absent
@@ -85,8 +75,6 @@
 # for every role/node which depends on this role.
 - name: Download Oracle Java redis package
   tags: java
-  sudo: "{{ util_local_action_sudo_enable }}"
-  sudo_user: "{{ util_local_action_sudo_user|default(omit) }}"
   register: java_oracle_redis_download
   when: java_oracle_redis_exists.rc != 0
   local_action: command
@@ -102,8 +90,6 @@
 
 - name: Download Oracle Java JCE redis package
   tags: java
-  sudo: "{{ util_local_action_sudo_enable }}"
-  sudo_user: "{{ util_local_action_sudo_user|default(omit) }}"
   register: java_oracle_redis_jce_download
   when: java_oracle_redis_jce_exists.rc != 0
   local_action: command
@@ -120,8 +106,6 @@
 # Fixup possible users umask issues
 - name: Ensure downloaded archives are world readable
   tags: java
-  sudo: "{{ util_local_action_sudo_enable }}"
-  sudo_user: "{{ util_local_action_sudo_user|default(omit) }}"
   with_items: ["{{ java_oracle_redis_filename }}", "{{ java_oracle_redis_jce_filename }}"]
   local_action: file
     dest={{ util_persistent_data_path_local }}/{{ item }}
@@ -130,8 +114,6 @@
 # Test whether downloaded redistributable package passes sha256sum
 - name: Verify Oracle Java redis package sha256sum
   tags: java
-  sudo: "{{ util_local_action_sudo_enable }}"
-  sudo_user: "{{ util_local_action_sudo_user|default(omit) }}"
   when: java_oracle_redis_download|changed
   local_action: command
     shasum
@@ -143,8 +125,6 @@
 
 - name: Verify Java JCE redis package sha256sum
   tags: java
-  sudo: "{{ util_local_action_sudo_enable }}"
-  sudo_user: "{{ util_local_action_sudo_user|default(omit) }}"
   when: java_oracle_redis_jce_download|changed
   local_action: command
     shasum
