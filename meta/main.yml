@@ -14,7 +14,7 @@ galaxy_info:
   description: Manage Java installation
   company: http://silpion.de
   license: Apache 2
-  min_ansible_version: 1.8
+  min_ansible_version: 1.9
 
   #
   # Below are all platforms currently available. Just uncomment
