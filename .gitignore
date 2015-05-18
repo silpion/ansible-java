@@ -23,3 +23,5 @@ Gemfile.lock
 ## Custom
 /temp/
 /tmp/
+
+**/*.pyc
