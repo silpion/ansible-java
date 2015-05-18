@@ -29,6 +29,7 @@
   tags: java
   ignore_errors: true
   failed_when: false
+  changed_when: false
   register: java_oracle_redis_exists
   local_action: command
     shasum
@@ -42,6 +43,7 @@
   tags: java
   ignore_errors: true
   failed_when: false
+  changed_when: false
   register: java_oracle_redis_jce_exists
   local_action: command
     shasum
