@@ -96,6 +96,7 @@
   tags: java
   become: yes
   when: java_oracle_distribution == 'jre'
+  changed_when: false
   with_items:
     - local_policy.jar
     - US_export_policy.jar
@@ -110,6 +111,7 @@
   tags: java
   become: yes
   when: java_oracle_distribution == 'jdk'
+  changed_when: false
   with_items:
     - local_policy.jar
     - US_export_policy.jar
