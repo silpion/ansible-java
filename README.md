@@ -105,8 +105,8 @@ Apache Version 2.0
 
 ## Author
 
-Mark Kusch @mark.kusch silpion.de
-Marc Rohlfs @marc.rohlfs silpion.de
+* Mark Kusch @mark.kusch silpion.de
+* Marc Rohlfs @marc.rohlfs silpion.de
 
 ### Contributors
 
