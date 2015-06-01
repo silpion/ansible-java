@@ -44,9 +44,9 @@
 
 - name: Install required packages
   tags: java
-  sudo: yes
+  become: yes
   with_items: java_package_list
-  action: "{{ ansible_pkg_mgr }} state=installed name={{ item }}"
+  action: "{{ ansible_pkg_mgr }} state={{ util_package_state }} name={{ item }}"
 
 
 # Install Oracle Java JDK
@@ -54,7 +54,7 @@
 # Directory for unarchiving the configured version of Java.
 - name: Install Java base directory
   tags: java
-  sudo: yes
+  become: yes
   file:
     state=directory
     owner=0
@@ -65,7 +65,7 @@
 # Install the Oracle redistributable package to the node
 - name: Copy Java redistributable packages
   tags: java
-  sudo: yes
+  become: yes
   with_items: ["{{ java_oracle_redis_filename }}", "{{ java_oracle_redis_jce_filename }}"]
   copy:
     src={{ util_persistent_data_path_local }}/{{ item }}
@@ -76,7 +76,7 @@
 
 - name: Install Java
   tags: java
-  sudo: yes
+  become: yes
   unarchive:
     src={{ util_persistent_data_path_remote }}/{{ java_oracle_redis_filename }}
     dest={{ java_install_dir }}/oracle/
@@ -94,8 +94,9 @@
 
 - name: Install Java JCE policies to JRE
   tags: java
-  sudo: yes
+  become: yes
   when: java_oracle_distribution == 'jre'
+  changed_when: false
   with_items:
     - local_policy.jar
     - US_export_policy.jar
@@ -108,8 +109,9 @@
 
 - name: Install Java JCE policies to JDK
   tags: java
-  sudo: yes
+  become: yes
   when: java_oracle_distribution == 'jdk'
+  changed_when: false
   with_items:
     - local_policy.jar
     - US_export_policy.jar
@@ -123,7 +125,8 @@
 
 # Archives may be packaged with some useless uid and gid
 - name: Fixup filesystem permissions
-  sudo: yes
+  tags: java
+  become: yes
   file:
     state=directory
     owner=0
@@ -141,7 +144,7 @@
 
 - name: Install Ansible facts.d directory
   tags: java
-  sudo: yes
+  become: yes
   file:
     state=directory
     dest=/etc/ansible/facts.d
@@ -151,7 +154,7 @@
 
 - name: Install java facts
   tags: java
-  sudo: yes
+  become: yes
   template:
     src=facts.j2
     dest=/etc/ansible/facts.d/java.fact
@@ -168,7 +171,7 @@
 # Configure Java installation as system wide default Java
 - name: Install Java default implementation
   tags: java
-  sudo: yes
+  become: yes
   template:
     src=java.sh.j2
     dest={{ java_install_dir }}/java.sh
@@ -178,7 +181,7 @@
 
 - name: Activate Java system environment configuration
   tags: java
-  sudo: yes
+  become: yes
   file:
     state=link
     src={{ java_install_dir }}/java.sh
