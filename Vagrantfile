@@ -13,7 +13,7 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
     d.vm.synced_folder '.', '/vagrant', id: 'vagrant-root', disabled: true
 
     d.vm.provision :ansible do |ansible|
-      ansible.playbook = 'tests/playbook.yml'
+      ansible.playbook = 'tests/keystore.yml'
       ansible.tags = ENV['ANSIBLE_TAGS']
       ansible.groups = {
         'vagrant' => ['ansiblejavatest']
