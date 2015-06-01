@@ -1,3 +1,24 @@
+# 1.0.0
+
+Marc Rohlfs (1):
+
+* Fixed markdown
+
+Mark Kusch (16):
+
+* Draft: Manage Java keystores with the keystore module
+* Create test SSL certificates with "usable" CN names
+* Add support for create=BOOLEANS argument
+* Make keytool= argument optional
+* Do not add compiled Python code to the repository
+* This role now requires ansible version 1.9
+* s/sudo/become/g and proper sudo management again
+* Add copy and creates arguments to keystore: module
+* Install custom keystore when running vagrant
+* Pre-checking shasums will not generate change events anymore
+* Use util\_package\_state configuration from util role when installing packages
+* Do not generate changed events when installing JCE
+
 # 0.10.0
 
 Travis Truman (1):
