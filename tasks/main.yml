@@ -6,7 +6,7 @@
   tags: java
   assert:
     that:
-      - ansible_os_family in ['Debian', 'RedHat']
+      - ansible_os_family in java_supported_platform
       - ansible_architecture in ['x86_64']
 
 - name: Assert java_oracle_distribution value

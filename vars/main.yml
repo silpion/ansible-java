@@ -1,4 +1,8 @@
 ---
+java_supported_platform:
+  - Debian
+  - RedHat
+
 # Where to download Oracle Java implementation from
 java_oracle_mirror_base: 'http://download.oracle.com/otn-pub/java'
 java_oracle_mirror: "{{ java_oracle_mirror_base }}/jdk"
