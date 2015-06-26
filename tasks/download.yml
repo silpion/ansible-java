@@ -13,6 +13,20 @@
 
 
 # Downloaded archives are verified with shasum command
+- name: Register shasum binary
+  tags: java
+  changed_when: false
+  register: java_registered_shasum_binary
+  when: java_shasum_binary in (None, "")
+  with_first_found: java_shasum_binaries
+  local_action: raw /bin/true
+
+- name: Configure shasum binary
+  tags: java
+  local_action: set_fact
+    java_fact_shasum_binary={{ java_shasum_binary if java_shasum_binary not in (None, "") else java_registered_shasum_binary.results.0.item }}
+
+
 - name: Install Java redis packages sha256sum files
   tags: java
   with_items:
@@ -32,11 +46,10 @@
   changed_when: false
   register: java_oracle_redis_exists
   local_action: command
-    shasum
-      --algorithm 256
-      --portable
+    {{ java_fact_shasum_binary }}
       --check
       --status
+      {{ '--algorithm 256' if java_fact_shasum_binary|search('shasum') else '' }}
       {{ util_persistent_data_path_local }}/java.sha256sum
 
 - name: Verify Java JCE redis package sha256sum
@@ -46,11 +59,10 @@
   changed_when: false
   register: java_oracle_redis_jce_exists
   local_action: command
-    shasum
-      --algorithm 256
-      --portable
+    {{ java_fact_shasum_binary }}
       --check
       --status
+      {{ '--algorithm 256' if java_fact_shasum_binary|search('shasum') else '' }}
       {{ util_persistent_data_path_local }}/java_jce.sha256sum
 
 
@@ -118,20 +130,18 @@
   tags: java
   when: java_oracle_redis_download|changed
   local_action: command
-    shasum
-      --algorithm 256
-      --portable
+    {{ java_fact_shasum_binary }}
       --check
       --status
+      {{ '--algorithm 256' if java_fact_shasum_binary|search('shasum') else '' }}
       {{ util_persistent_data_path_local }}/java.sha256sum
 
 - name: Verify Java JCE redis package sha256sum
   tags: java
   when: java_oracle_redis_jce_download|changed
   local_action: command
-    shasum
-      --algorithm 256
-      --portable
+    {{ java_fact_shasum_binary }}
       --check
       --status
+      {{ '--algorithm 256' if java_fact_shasum_binary|search('shasum') else '' }}
       {{ util_persistent_data_path_local }}/java_jce.sha256sum
