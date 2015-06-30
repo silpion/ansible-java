@@ -14,3 +14,7 @@ java_oracle_version: 8u45
 
 # Base installation directory for any Java implementation/distribution
 java_install_dir: /opt/java
+
+# Allow to configure shasum binary for local_action: command
+#   This is gathered from java_shasum_binaries automatically if left empty
+java_shasum_binary: ""

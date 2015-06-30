@@ -1,3 +1,11 @@
+# 1.1.0
+
+Mark Kusch (5):
+
+* Abstract supported platform in vars
+* Maintain default places where to find shasum binaries
+* Allow to configure shasum binary for local\_action: command when validating shasums
+
 # 1.0.0
 
 Marc Rohlfs (1):
