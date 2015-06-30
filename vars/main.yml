@@ -25,3 +25,13 @@ java_oracle_redis_filename: "{{ java_oracle_distribution }}-{{ java_oracle_versi
 
 #   complete URL for downloading either the JRE or JDK for the Oracle Java implementation
 java_oracle_redis_mirror: "{{ java_oracle_mirror }}/{{ java_oracle_version_minor }}u{{ java_oracle_version_update }}-b{{ java_oracle_version_build }}/{{ java_oracle_redis_filename }}"
+
+
+# helper to figure local_action: command {# shasum_binary #}
+java_shasum_binaries:
+  - /usr/local/bin/shasum
+  - /usr/local/bin/sha256sum
+  - /usr/bin/shasum
+  - /usr/bin/sha256sum
+  - /bin/shasum
+  - /bin/sha256sum
