@@ -1,3 +1,9 @@
+# 1.1.1
+
+Mark Kusch (1):
+
+* Fix: stderr: fish: Expected a command name, got token of type “Run job in background”.
+
 # 1.1.0
 
 Mark Kusch (5):
