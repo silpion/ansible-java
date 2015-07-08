@@ -19,7 +19,7 @@
   register: java_registered_shasum_binary
   when: java_shasum_binary in (None, "")
   with_first_found: java_shasum_binaries
-  local_action: raw true
+  local_action: command true
 
 - name: Configure shasum binary
   tags: java
