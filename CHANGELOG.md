@@ -1,3 +1,9 @@
+# 1.2.0
+
+Ludovic Claude (1):
+
+* Add Java 8u51
+
 # 1.1.1
 
 Mark Kusch (1):
