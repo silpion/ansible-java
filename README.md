@@ -85,6 +85,13 @@ Be sure to install required roles with
 
 * [groover.util](https://github.com/silpion/ansible-util)
 
+## Checkmode
+
+Checkmode is supported provided that all assets have been downloaded.
+Otherwise, the copy tasks will fail.
+
+You can download the assets without making any changes on the remote nodes by executing this role with the ``java_download`` tag.
+
 ## Example playbook
 
     - hosts: all
