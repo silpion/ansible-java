@@ -20,7 +20,7 @@
   changed_when: false
   register: java_registered_shasum_binary
   when: java_shasum_binary in (None, "")
-  always_run: yes
+  always_run: true
   with_first_found: java_shasum_binaries
   local_action: command true
 
@@ -28,7 +28,7 @@
   tags:
     - java
     - java_download
-  always_run: yes
+  always_run: true
   local_action: set_fact
     java_fact_shasum_binary={{ java_shasum_binary if java_shasum_binary not in (None, "") else java_registered_shasum_binary.results.0.item }}
 
@@ -55,7 +55,7 @@
   failed_when: false
   changed_when: false
   register: java_oracle_redis_exists
-  always_run: yes
+  always_run: true
   local_action: command
     {{ java_fact_shasum_binary }}
       --check
@@ -71,7 +71,7 @@
   failed_when: false
   changed_when: false
   register: java_oracle_redis_jce_exists
-  always_run: yes
+  always_run: true
   local_action: command
     {{ java_fact_shasum_binary }}
       --check
