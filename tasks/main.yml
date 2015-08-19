@@ -40,6 +40,7 @@
   tags:
     - java
     - download
+    - java_download
 
 
 - name: Install required packages

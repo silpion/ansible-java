@@ -1,3 +1,12 @@
+# 1.3.0
+
+Alvaro Aleman (4):
+
+* Added always_run=yes to fact gathering tasks, introduced java_download tag
+* Readme: Added checkmode description
+* use true instead of yes for booleans
+* tdd functionality updated
+
 # 1.2.0
 
 Ludovic Claude (1):
