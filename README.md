@@ -4,7 +4,7 @@ Install Oracle Java.
 
 ## Compatibility
 
-### ansible-java 0.7.0
+### ansible-java
 
 Starting with this role version, inventory configuration for pinned
 versions of Java to be installed has changed.
@@ -56,12 +56,16 @@ the *vars/versions* directory. When configuring a version, that is not predefine
 
 ### Supported versions
 
+* 7u21
 * 7u51
 * 7u71
 * 8u20
 * 8u25
 * 8u31
 * 8u45
+* 8u51
+* 8u60
+* 8u65
 
 ## Role facts
 
