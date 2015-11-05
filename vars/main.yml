@@ -9,23 +9,18 @@ java_oracle_mirror: "{{ java_oracle_mirror_base }}/jdk"
 
 
 # Helper variables for Oracle to keep code readable
-
-#   configure a version string Oracle uses from their version information
-java_oracle_version_str_redis: "{{ java_oracle_version_minor }}u{{ java_oracle_version_update }}"
-
-#   Redistributable package names
-java_oracle_redis_jdk_filename: "jdk-{{ java_oracle_version_str_redis }}-linux-x64.tar.gz"
-java_oracle_redis_jre_filename: "jre-{{ java_oracle_version_str_redis }}-linux-x64.tar.gz"
-
 #   top level directory within the Oracle redis archive
-java_oracle_version_str_pkg: "{{ java_oracle_distribution }}{{ java_oracle_version_major }}.{{ java_oracle_version_minor }}.{{ java_oracle_version_patch }}_{{ java_oracle_version_update }}"
+java_oracle_version_str_pkg: "{{ 'jdk' if java_oracle_distribution == 'srv' else java_oracle_distribution }}{{ java_oracle_version_major }}.{{ java_oracle_version_minor }}.{{ java_oracle_version_patch }}_{{ java_oracle_version_update }}"
 
-#   source file name for either the JRE or JDK for the Oracle Java implementation
-java_oracle_redis_filename: "{{ java_oracle_distribution }}-{{ java_oracle_version_str_redis }}-linux-x64.tar.gz"
+#   source file name for either the JRE, JDK or Server JRE for the Oracle Java implementation
+java_oracle_redis_filename: "{{ 'server-jre' if java_oracle_distribution == 'srv' else java_oracle_distribution }}-{{ java_oracle_version }}-linux-x64.tar.gz"
+#java_oracle_redis_filename: "{{ java_oracle_distribution }}-{{ java_oracle_version }}-linux-x64.tar.gz"
 
 #   complete URL for downloading either the JRE or JDK for the Oracle Java implementation
-java_oracle_redis_mirror: "{{ java_oracle_mirror }}/{{ java_oracle_version_minor }}u{{ java_oracle_version_update }}-b{{ java_oracle_version_build }}/{{ java_oracle_redis_filename }}"
+java_oracle_redis_mirror: "{{ java_oracle_mirror }}/{{ java_oracle_version }}-b{{ java_oracle_version_build }}/{{ java_oracle_redis_filename }}"
 
+#   where to install the JCE extensions to
+java_oracle_jce_install_dir: "{{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}/{{ '/jre' if java_oracle_distribution in ('jdk', 'srv') }}/lib/security"
 
 # helper to figure local_action: command {# shasum_binary #}
 java_shasum_binaries:
