@@ -20,7 +20,7 @@ java_oracle_redis_filename: "{{ 'server-jre' if java_oracle_distribution == 'srv
 java_oracle_redis_mirror: "{{ java_oracle_mirror }}/{{ java_oracle_version }}-b{{ java_oracle_version_build }}/{{ java_oracle_redis_filename }}"
 
 #   where to install the JCE extensions to
-java_oracle_jce_install_dir: "{{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}/{{ '/jre' if java_oracle_distribution in ('jdk', 'srv') }}/lib/security"
+java_oracle_jce_install_dir: "{{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}/{{ '/jre' if java_oracle_distribution in ('jdk', 'srv') else '' }}/lib/security"
 
 # helper to figure local_action: command {# shasum_binary #}
 java_shasum_binaries:
