@@ -1,3 +1,25 @@
+# 1.4.0
+
+Marc Rohlfs (3):
+
+* Added version var definition for latest Java version 8u60 and set it as role default.
+* Added version var definition for Java version 7u21.
+* Fixed path to keytool - it must not be hardcoded.
+
+Mark Kusch (7):
+
+* Update default Java version to 8u66
+* Remove redundant tasks
+* Add support for Oracle server-jre
+* Update documentation for server-jre support and default versions
+* Fix "the inline if-expression on line 1 evaluated to false and no else section was defined"
+* Use complex args coding style
+* Use true and false for boolean arguments
+
+Ruslan Tumarkin (1):
+
+* Add 8u65 as supported version
+
 # 1.3.0
 
 Alvaro Aleman (4):
