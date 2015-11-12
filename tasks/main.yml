@@ -45,9 +45,12 @@
 
 - name: Install required packages
   tags: java
-  become: yes
+  become: true
   with_items: java_package_list
-  action: "{{ ansible_pkg_mgr }} state={{ util_package_state }} name={{ item }}"
+  action: "{{ ansible_pkg_mgr }}"
+  args:
+    state: "{{ util_package_state }}"
+    name: "{{ item }}"
 
 
 # Install Oracle Java JDK
@@ -55,47 +58,47 @@
 # Directory for unarchiving the configured version of Java.
 - name: Install Java base directory
   tags: java
-  become: yes
+  become: true
   file:
-    state=directory
-    owner=0
-    group=0
-    mode=0755
-    dest={{ java_install_dir }}/oracle
+    state: directory
+    owner: 0
+    group: 0
+    mode: 0755
+    dest: "{{ java_install_dir }}/oracle"
 
 # Install the Oracle redistributable package to the node
 - name: Copy Java redistributable packages
   tags: java
-  become: yes
+  become: true
   with_items: ["{{ java_oracle_redis_filename }}", "{{ java_oracle_redis_jce_filename }}"]
   copy:
-    src={{ util_persistent_data_path_local }}/{{ item }}
-    dest={{ util_persistent_data_path_remote }}/{{ item }}
-    owner=0
-    group=0
-    mode=0644
+    src: "{{ util_persistent_data_path_local }}/{{ item }}"
+    dest: "{{ util_persistent_data_path_remote }}/{{ item }}"
+    owner: 0
+    group: 0
+    mode: 0644
 
 - name: Install Java
   tags: java
-  become: yes
+  become: true
   unarchive:
-    src={{ util_persistent_data_path_remote }}/{{ java_oracle_redis_filename }}
-    dest={{ java_install_dir }}/oracle/
-    copy=false
-    creates={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
+    src: "{{ util_persistent_data_path_remote }}/{{ java_oracle_redis_filename }}"
+    dest: "{{ java_install_dir }}/oracle/"
+    copy: false
+    creates: "{{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}"
 
 - name: Unarchive Java JCE package
   tags: java
   unarchive:
-    src={{ util_persistent_data_path_remote }}/{{ java_oracle_redis_jce_filename }}
-    dest=/tmp/
-    copy=false
-    creates=/tmp/{{ java_oracle_redis_jce_archive_dirname }}
+    src: "{{ util_persistent_data_path_remote }}/{{ java_oracle_redis_jce_filename }}"
+    dest: /tmp/
+    copy: false
+    creates: /tmp/{{ java_oracle_redis_jce_archive_dirname }}
 
 
 - name: Install Java JCE policies
   tags: java
-  become: yes
+  become: true
   changed_when: false
   with_items:
     - local_policy.jar
@@ -112,13 +115,13 @@
 # Archives may be packaged with some useless uid and gid
 - name: Fixup filesystem permissions
   tags: java
-  become: yes
+  become: true
   file:
-    state=directory
-    owner=0
-    group=0
-    recurse=true
-    dest={{ java_install_dir }}
+    state: directory
+    owner: 0
+    group: 0
+    recurse: true
+    dest: "{{ java_install_dir }}"
 
 
 # Setup a custom fact to allow roles depending on Java to configure
@@ -126,39 +129,39 @@
 - name: Set JAVA_HOME ansible fact
   tags: java
   set_fact:
-    java_home={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
+    java_home: "{{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}"
 
 - name: Install java facts
   tags: java
-  become: yes
+  become: true
   template:
-    src=facts.j2
-    dest=/etc/ansible/facts.d/java.fact
-    owner=0
-    group=0
-    mode=0644
+    src: facts.j2
+    dest: /etc/ansible/facts.d/java.fact
+    owner: 0
+    group: 0
+    mode: 0644
 
 - name: Re-read local facts
   tags: java
   setup:
-    filter=ansible_local
+    filter: ansible_local
 
 
 # Configure Java installation as system wide default Java
 - name: Install Java default implementation
   tags: java
-  become: yes
+  become: true
   template:
-    src=java.sh.j2
-    dest={{ java_install_dir }}/java.sh
-    owner=0
-    group=0
-    mode=0755
+    src: java.sh.j2
+    dest: "{{ java_install_dir }}/java.sh"
+    owner: 0
+    group: 0
+    mode: 0755
 
 - name: Activate Java system environment configuration
   tags: java
-  become: yes
+  become: true
   file:
-    state=link
-    src={{ java_install_dir }}/java.sh
-    dest=/etc/profile.d/java.sh
+    state: link
+    src: "{{ java_install_dir }}/java.sh"
+    dest: /etc/profile.d/java.sh
