@@ -1,0 +1,13 @@
+---
+java_oracle_version_major: 1
+java_oracle_version_minor: 7
+java_oracle_version_patch: 0
+java_oracle_version_update: 21
+java_oracle_version_build: 11
+
+java_oracle_redis_jdk_sha256sum: 390700b531491ab51c00432517ac8739b7a61c9817fcde3650aa6dbd9b21c056
+java_oracle_redis_jre_sha256sum: 27c846d070884f30084f212c8ca76af272177efc460304503bfaa488ff1ad8f1
+java_oracle_redis_jce_sha256sum: 7a8d790e7bd9c2f82a83baddfae765797a4a56ea603c9150c87b7cdb7800194d
+java_oracle_mirror_jce: "{{ java_oracle_mirror_base }}/jce/7"
+java_oracle_redis_jce_filename: UnlimitedJCEPolicyJDK7.zip
+java_oracle_redis_jce_archive_dirname: UnlimitedJCEPolicy

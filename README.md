@@ -2,23 +2,6 @@
 
 Install Oracle Java.
 
-## Compatibility
-
-### ansible-java 0.7.0
-
-Starting with this role version, inventory configuration for pinned
-versions of Java to be installed has changed.
-To pin a version it is enough to configure ``java_oracle_version``
-which requires ``vars/versions/{{ java_oracle_version }}.yml`` to be
-configured.
-
-Starting with this role version the variable to choose between JDK or
-JRE has been renamed to ``java_oracle_distribution`` for consistency
-reasons.
-
-Starting with this role version the default Java version has been
-updated to Java8.
-
 ## Architecture
 
 The role downloads redistributable packages from the internet
@@ -31,15 +14,17 @@ are running ansible-playbook on to manage nodes (your workstation).
 
 ## Role variables
 
-* ``java_oracle_distribution``: Configure the Java distribution to be installed (default: ``jdk``, values: [``jdk``, ``jre``])
-* ``java_oracle_version``: Configure Java version to be installed (string, default: ``8u25``)
+* ``java_oracle_distribution``: Configure the Java distribution to be installed (default: ``jdk``, values: [``jdk``, ``jre``, ``srv``])
+* ``java_oracle_version``: Configure Java version to be installed (string, default: ``8u66``)
 * ``java_install_dir``: Base installation directory for any Java implementation/distribution (string, default: ``/opt/java``)
 * ``java_shasum_binary``: Allows to configure shasum binary for local\_action: command (string, default: ``with_first_found: java_shasum_binaries`` (see ``vars/main.yml``))
+
+Note: ``srv`` is an Ansible compatible shorthand for the Oracle ``server-jre``.
 
 ### Versioned variables
 
 Predefined SHA sums and further version specific configuration may get found in
-the *vars/versions* directory. When configuring a version, that is not predefined
+the ``vars/versions`` directory. When configuring a version, that is not predefined
 (so far), the following variables must also be defined in the playbook:
 
 * ``java_oracle_version_major``: Oracle major version
@@ -49,6 +34,7 @@ the *vars/versions* directory. When configuring a version, that is not predefine
 * ``java_oracle_version_build``: Oracle build version
 * ``java_oracle_redis_jdk_sha256sum``: SHA256 sum for the downloaded Oracle Java JDK redistributable package - mandatory when ``java_oracle_distribution`` is ``jdk``
 * ``java_oracle_redis_jre_sha256sum``: SHA256 sum for the downloaded Oracle Java JRE redistributable package - mandatory when ``java_oracle_distribution`` is ``jre``
+* ``java_oracle_redis_srv_sha256sum``: SHA256 sum for the downloaded Oracle Java Server-JRE redistributable package - mandatory when ``java_oracle_distribution`` is ``srv``
 * ``java_oracle_redis_jce_sha256sum``: SHA256 sum for the downloaded Oracle Java JCE policies package
 * ``java_oracle_mirror_jce``: Mirror URL for the download of the Oracle Java JCE policies package
 * ``java_oracle_redis_jce_filename``:  File name of the Oracle Java JCE policies package
@@ -56,12 +42,20 @@ the *vars/versions* directory. When configuring a version, that is not predefine
 
 ### Supported versions
 
+* 7u21
 * 7u51
 * 7u71
 * 8u20
 * 8u25
 * 8u31
 * 8u45
+* 8u51
+* 8u60
+* 8u65
+* 8u66
+
+Starting with ``8u66`` configuration of ``java_oracle_distribution``: ``srv`` is
+available.
 
 ## Role facts
 

@@ -30,7 +30,8 @@
     - java_download
   always_run: true
   local_action: set_fact
-    java_fact_shasum_binary={{ java_shasum_binary if java_shasum_binary not in (None, "") else java_registered_shasum_binary.results.0.item }}
+  args:
+    java_fact_shasum_binary: "{{ java_shasum_binary if java_shasum_binary not in (None, '') else java_registered_shasum_binary.results.0.item }}"
 
 
 - name: Install Java redis packages sha256sum files
@@ -41,9 +42,10 @@
     - java.sha256sum
     - java_jce.sha256sum
   local_action: template
-    src={{ item }}.j2
-    dest={{ util_persistent_data_path_local }}/{{ item }}
-    mode=0644
+  args:
+    src: "{{ item }}.j2"
+    dest: "{{ util_persistent_data_path_local }}/{{ item }}"
+    mode: 0644
 
 
 # Test whether we need to download Java (again).
@@ -87,8 +89,9 @@
     - java_download
   when: java_oracle_redis_exists.rc != 0
   local_action: file
-    state=absent
-    dest={{ util_persistent_data_path_local }}/{{ java_oracle_redis_filename }}
+  args:
+    state: absent
+    dest: "{{ util_persistent_data_path_local }}/{{ java_oracle_redis_filename }}"
 
 - name: Remove possible broken Java JCE redis package
   tags:
@@ -96,8 +99,9 @@
     - java_download
   when: java_oracle_redis_jce_exists.rc != 0
   local_action: file
-    state=absent
-    dest={{ util_persistent_data_path_local }}/{{ java_oracle_redis_jce_filename }}
+  args:
+    state: absent
+    dest: "{{ util_persistent_data_path_local }}/{{ java_oracle_redis_jce_filename }}"
 
 
 # Download the Java distribution from Oracle to the workstations'
@@ -119,8 +123,9 @@
       --cookie oraclelicense={{ java_oracle_curl_cookie }}
       --cookie-jar /tmp/{{ java_oracle_redis_filename }}.cookie
       {{ java_oracle_redis_mirror }}
-    chdir={{ util_persistent_data_path_local }}
-    creates={{ util_persistent_data_path_local }}/{{ java_oracle_redis_filename }}
+  args:
+    chdir: "{{ util_persistent_data_path_local }}"
+    creates: "{{ util_persistent_data_path_local }}/{{ java_oracle_redis_filename }}"
 
 - name: Download Oracle Java JCE redis package
   tags:
@@ -136,8 +141,9 @@
       --cookie oraclelicense={{ java_oracle_curl_cookie }}
       --cookie-jar /tmp/{{ java_oracle_redis_filename }}.cookie
       {{ java_oracle_mirror_jce }}/{{ java_oracle_redis_jce_filename }}
-    chdir={{ util_persistent_data_path_local }}
-    creates={{ util_persistent_data_path_local }}/{{ java_oracle_redis_jce_filename }}
+  args:
+    chdir: "{{ util_persistent_data_path_local }}"
+    creates: "{{ util_persistent_data_path_local }}/{{ java_oracle_redis_jce_filename }}"
 
 # Fixup possible users umask issues
 - name: Ensure downloaded archives are world readable
@@ -146,8 +152,9 @@
     - java_download
   with_items: ["{{ java_oracle_redis_filename }}", "{{ java_oracle_redis_jce_filename }}"]
   local_action: file
-    dest={{ util_persistent_data_path_local }}/{{ item }}
-    mode=0644
+  args:
+    dest: "{{ util_persistent_data_path_local }}/{{ item }}"
+    mode: 0644
 
 # Test whether downloaded redistributable package passes sha256sum
 - name: Verify Oracle Java redis package sha256sum
