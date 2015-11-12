@@ -13,7 +13,7 @@
   tags: java
   assert:
     that:
-      - java_oracle_distribution in ('jre', 'jdk')
+      - java_oracle_distribution in ('jdk', 'jre', 'srv')
 
 # Overide variables based on known/supported Java versions
 - name: Load version vars
@@ -93,10 +93,9 @@
     creates=/tmp/{{ java_oracle_redis_jce_archive_dirname }}
 
 
-- name: Install Java JCE policies to JRE
+- name: Install Java JCE policies
   tags: java
   become: yes
-  when: java_oracle_distribution == 'jre'
   changed_when: false
   with_items:
     - local_policy.jar
@@ -106,22 +105,8 @@
       --group root
       --mode 0644
       /tmp/{{ java_oracle_redis_jce_archive_dirname }}/{{ item }}
-      {{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}/lib/security/{{ item }}
+      {{ java_oracle_jce_install_dir }}/{{ item }}
 
-- name: Install Java JCE policies to JDK
-  tags: java
-  become: yes
-  when: java_oracle_distribution == 'jdk'
-  changed_when: false
-  with_items:
-    - local_policy.jar
-    - US_export_policy.jar
-  command: install
-      --owner root
-      --group root
-      --mode 0644
-      /tmp/{{ java_oracle_redis_jce_archive_dirname }}/{{ item }}
-      {{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}/jre/lib/security/{{ item }}
 
 
 # Archives may be packaged with some useless uid and gid
@@ -142,16 +127,6 @@
   tags: java
   set_fact:
     java_home={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
-
-- name: Install Ansible facts.d directory
-  tags: java
-  become: yes
-  file:
-    state=directory
-    dest=/etc/ansible/facts.d
-    owner=0
-    group=0
-    mode=0755
 
 - name: Install java facts
   tags: java
