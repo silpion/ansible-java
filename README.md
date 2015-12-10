@@ -45,6 +45,7 @@ the ``vars/versions`` directory. When configuring a version, that is not predefi
 * 7u21
 * 7u51
 * 7u71
+* 7u80
 * 8u20
 * 8u25
 * 8u31
