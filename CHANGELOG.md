@@ -1,3 +1,10 @@
+# 1.5.0
+
+Alvaro Aleman (2):
+
+* Add \*.swp to gitignore
+* Add Java 7u80 support
+
 # 1.4.0
 
 Marc Rohlfs (3):
