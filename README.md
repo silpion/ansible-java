@@ -110,6 +110,7 @@ Apache Version 2.0
 
 * Mark Kusch @mark.kusch silpion.de
 * Marc Rohlfs @marc.rohlfs silpion.de
+* Alvaro Aleman @alvaro.aleman silpion.de
 
 ### Contributors
 
