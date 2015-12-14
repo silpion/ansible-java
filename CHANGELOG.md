@@ -1,3 +1,11 @@
+# 1.5.1
+
+Mark Kusch (3):
+
+* Add documentation for server-jre distribution support starting with 7u80 in Java 7 tree
+* Add missing sha256sums for 7u80 server-jre distribution
+* Fixup wrong sha256sum for 7u80 JRE distribution (thx to WeVaSoft)
+
 # 1.5.0
 
 Alvaro Aleman (2):
