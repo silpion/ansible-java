@@ -55,8 +55,12 @@ the ``vars/versions`` directory. When configuring a version, that is not predefi
 * 8u65
 * 8u66
 
-Starting with ``8u66`` configuration of ``java_oracle_distribution``: ``srv`` is
-available.
+Starting with
+
+* ``7u80`` (Java 7)
+* ``8u66`` (Java 8)
+
+configuration of ``java_oracle_distribution``: ``srv`` is available.
 
 ## Role facts
 
