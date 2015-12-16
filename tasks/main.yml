@@ -3,28 +3,36 @@
 #
 #   Fail the play if it runs on an unsupported platform,
 - name: Assert platform is supported
-  tags: java
+  tags:
+    - java
+    - java_download
   assert:
     that:
       - ansible_os_family in java_supported_platform
       - ansible_architecture in ['x86_64']
 
 - name: Assert java_oracle_distribution value
-  tags: java
+  tags:
+    - java
+    - java_download
   assert:
     that:
       - java_oracle_distribution in ('jdk', 'jre', 'srv')
 
 # Overide variables based on known/supported Java versions
 - name: Load version vars
-  tags: java
+  tags:
+    - java
+    - java_download
   with_first_found:
     - ../vars/versions/{{ java_oracle_version }}.yml
     - ../vars/versions/default.yml
   include_vars: "{{ item }}"
 
 - name: Assert version vars
-  tags: java
+  tags:
+    - java
+    - java_download
   assert:
     that:
       - java_oracle_redis_{{ java_oracle_distribution }}_sha256sum not in (None, "")
