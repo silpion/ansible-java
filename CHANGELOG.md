@@ -1,3 +1,14 @@
+# 1.6.0
+
+Alvaro Aleman (1):
+
+* Add java\_download tag to all required tasks
+
+Mark Kusch (2):
+
+* Ensure version specific sha256sum templates
+* Add latest 8 and 7 for jre, jdk and srv to test playbook<Paste>
+
 # 1.5.1
 
 Mark Kusch (3):
