@@ -1,9 +1,11 @@
 {%- if java_oracle_distribution == 'jdk' -%}
 {{ java_oracle_redis_jdk_sha256sum }} *{{ util_persistent_data_path_local }}/{{ java_oracle_redis_filename }}
-{%- endif -%}
+{%- endif %}
 {% if java_oracle_distribution == 'jre' -%}
 {{ java_oracle_redis_jre_sha256sum }} *{{ util_persistent_data_path_local }}/{{ java_oracle_redis_filename }}
-{%- endif -%}
+{%- endif %}
 {% if java_oracle_distribution == 'srv' -%}
 {{ java_oracle_redis_srv_sha256sum }} *{{ util_persistent_data_path_local }}/{{ java_oracle_redis_filename }}
-{%- endif -%}
+{%- endif %}
+
+{{ java_oracle_redis_jce_sha256sum }} *{{ util_persistent_data_path_local }}/{{ java_oracle_redis_jce_filename }}
