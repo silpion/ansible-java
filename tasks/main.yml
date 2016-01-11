@@ -1,6 +1,21 @@
 ---
 # Main list of tasks to be executed.
 #
+# Check if we on check-mode
+- name: set restered var for check-mode
+  tags:
+    - java
+    - java_download
+  register: java_register_noop_result
+  command: /bin/true
+
+- name: set fact for check-mode
+  tags:
+    - java
+    - java_download
+  set_fact:
+    check_mode: "{{ java_register_noop_result|skipped }}"
+
 #   Fail the play if it runs on an unsupported platform,
 - name: Assert platform is supported
   tags:
@@ -89,6 +104,7 @@
 - name: Install Java
   tags: java
   become: true
+  when: not java_register_noop_result
   unarchive:
     src: "{{ util_persistent_data_path_remote }}/{{ java_oracle_redis_filename }}"
     dest: "{{ java_install_dir }}/oracle/"
@@ -97,6 +113,7 @@
 
 - name: Unarchive Java JCE package
   tags: java
+  when: not java_register_noop_result
   unarchive:
     src: "{{ util_persistent_data_path_remote }}/{{ java_oracle_redis_jce_filename }}"
     dest: /tmp/
@@ -169,6 +186,7 @@
 - name: Activate Java system environment configuration
   tags: java
   become: true
+  when: not java_register_noop_result
   file:
     state: link
     src: "{{ java_install_dir }}/java.sh"
