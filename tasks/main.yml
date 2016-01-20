@@ -1,22 +1,4 @@
 ---
-# Main list of tasks to be executed.
-#
-# Check if we on check-mode
-- name: set restered var for check-mode
-  tags:
-    - java
-    - java_download
-  register: java_register_noop_result
-  command: /bin/true
-
-- name: set fact for check-mode
-  tags:
-    - java
-    - java_download
-  set_fact:
-    check_mode: "{{ java_register_noop_result|skipped }}"
-
-#   Fail the play if it runs on an unsupported platform,
 - name: Assert platform is supported
   tags:
     - java
@@ -33,6 +15,12 @@
   assert:
     that:
       - java_oracle_distribution in ('jdk', 'jre', 'srv')
+
+
+- name: Include --check mode detection
+  tags: java
+  include: ../../silpion.util/tasks/_check.yml
+
 
 # Overide variables based on known/supported Java versions
 - name: Load version vars
@@ -72,7 +60,7 @@
   with_items: java_package_list
   action: "{{ ansible_pkg_mgr }}"
   args:
-    state: "{{ util_package_state }}"
+    state: "{{ util_package_state|default('present') }}"
     name: "{{ item }}"
 
 
@@ -104,7 +92,7 @@
 - name: Install Java
   tags: java
   become: true
-  when: not java_register_noop_result
+  when: not util_fact_check_mode
   unarchive:
     src: "{{ util_persistent_data_path_remote }}/{{ java_oracle_redis_filename }}"
     dest: "{{ java_install_dir }}/oracle/"
@@ -113,7 +101,7 @@
 
 - name: Unarchive Java JCE package
   tags: java
-  when: not java_register_noop_result
+  when: not util_fact_check_mode
   unarchive:
     src: "{{ util_persistent_data_path_remote }}/{{ java_oracle_redis_jce_filename }}"
     dest: /tmp/
@@ -186,7 +174,7 @@
 - name: Activate Java system environment configuration
   tags: java
   become: true
-  when: not java_register_noop_result
+  when: not util_fact_check_mode
   file:
     state: link
     src: "{{ java_install_dir }}/java.sh"
