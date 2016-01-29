@@ -1,18 +1,74 @@
-# ansible-java
+# silpion.java
 
 Install Oracle Java.
 
-## Architecture
+## Synopsis
+
+```yaml
+- name: Install Java 8u66 JDK to /opt/java
+  hosts: all
+  roles:
+    - role: silpion.java
+```
+
+```yaml
+- name: Install Java server-jre to /usr/local/java
+  hosts: all
+  roles:
+    - role: silpion.java
+      vars:
+        oracle_java_distribution: srv
+        java_install_dir: /usr/local/java
+```
+
+```yaml
+- name: Install Java JRE 8u60
+  hosts: all
+  roles:
+    - role: silpion.java
+      vars:
+        oracle_java_version: 8u60
+        oracle_java_distribution: jre
+```
+
+## Description
 
 The role downloads redistributable packages from the internet
 to the hosts local filesystem before it may install those on
 any number of managed nodes in the local network.
 
-Downloads are performed with the command module using curl.
+Downloads are performed with the ``command`` module using ``curl``.
 It is required to have curl installed on the local host you
 are running ansible-playbook on to manage nodes (your workstation).
 
-## Role variables
+Downloaded assets are verified based on SHA 256 checksums on
+the local workstation before getting copied to the managed node.
+
+The local shasum binary is guessed automatically but may get
+configured via ``java_shasum_binary: /path/to/shasum/binary``.
+
+For detailed configuration options see [Role Variables](#role_variables)
+documentation below.
+
+## Dependencies
+
+``silpion.java`` role depends on the ``silpion.lib`` role. This
+is configured for the ``ansible-galaxy install`` command in
+**requirements.yml**.
+
+**NOTE**: Ensure ``silpion.lib`` role is getting installed as ``silpion.lib``.
+There are hardcoded references to this name in this role.
+
+```sh
+# Install silpion.lib role with ansible-galaxy
+ansible-galaxy install --role-file requirements.yml
+```
+
+### Roles
+
+* [silpion.lib](https://github.com/silpion/ansible-lib)
+
+## <a name="role_variables"></a>Role Variables
 
 * ``java_oracle_distribution``: Configure the Java distribution to be installed (default: ``jdk``, values: [``jdk``, ``jre``, ``srv``])
 * ``java_oracle_version``: Configure Java version to be installed (string, default: ``8u66``)
@@ -69,20 +125,6 @@ This role sets persistent facts for other roles to use via
 * facts.d ``ansible_local.java.general.java_home``
 
 This variable contains the path to the default JVM configured with this role.
-
-## Dependencies
-
-This role depends on ``groover.util`` role. This is configured
-for ``ansible-galaxy install`` in **requirements.yml**.
-
-**NOTE**: Requirements are installed as virtual user ``silpion``
-(``silpion.util``)
-
-Be sure to install required roles with
-
-    ansible-galaxy install --role-file requirements.yml
-
-* [groover.util](https://github.com/silpion/ansible-util)
 
 ## Checkmode
 
