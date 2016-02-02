@@ -143,6 +143,8 @@
 - name: Include local facts tasks
   tags: java
   include: ../../silpion.lib/tasks/localfacts.yml
+  vars:
+    namespace: java
 
 
 # Configure Java installation as system wide default Java
