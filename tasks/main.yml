@@ -19,20 +19,18 @@
 
 - name: Include --check mode detection
   tags: java
-  include: ../../silpion.util/tasks/_check.yml
+  include: ../../silpion.lib/tasks/checkmodedetection.yml
 
 
-# Overide variables based on known/supported Java versions
-- name: Load version vars
+- name: Include version specific configuration
   tags:
     - java
     - java_download
-  with_first_found:
-    - ../vars/versions/{{ java_oracle_version }}.yml
-    - ../vars/versions/default.yml
-  include_vars: "{{ item }}"
+  include: ../../silpion.lib/tasks/version-specific-vars.yml
+  vars:
+    version: "{{ java_oracle_version }}"
 
-- name: Assert version vars
+- name: Assert version specific configuration
   tags:
     - java
     - java_download
@@ -41,9 +39,15 @@
       - java_oracle_redis_{{ java_oracle_distribution }}_sha256sum not in (None, "")
       - java_oracle_redis_jce_sha256sum not in (None, "")
 
-- name: Include OS specific vars
+
+- name: Include OS specific configuration
   tags: java
-  include_vars: "{{ ansible_os_family }}.yml"
+  include: ../../silpion.lib/tasks/os-specific-vars.yml
+
+
+- name: Include assets persistency tasks
+  tags: java
+  include: ../../silpion.lib/tasks/datapersistency.yml
 
 
 # Manage local download of Oracle Java redistributable
@@ -80,30 +84,29 @@
 # Install the Oracle redistributable package to the node
 - name: Copy Java redistributable packages
   tags: java
-  become: true
-  with_items: ["{{ java_oracle_redis_filename }}", "{{ java_oracle_redis_jce_filename }}"]
-  copy:
-    src: "{{ util_persistent_data_path_local }}/{{ item }}"
-    dest: "{{ util_persistent_data_path_remote }}/{{ item }}"
-    owner: 0
-    group: 0
-    mode: 0644
+  become: ...
+  with_items:
+    - "{{ java_oracle_redis_filename }}"
+    - "{{ java_oracle_redis_jce_filename }}"
+  include: ../../silpion.lib/tasks/copy.yml
+  vars:
+    filename: "{{ item }}"
 
 - name: Install Java
   tags: java
   become: true
-  when: not util_fact_check_mode
+  when: not lib_fact_check_mode
   unarchive:
-    src: "{{ util_persistent_data_path_remote }}/{{ java_oracle_redis_filename }}"
+    src: "{{ lib_persistent_data_path_remote }}/{{ java_oracle_redis_filename }}"
     dest: "{{ java_install_dir }}/oracle/"
     copy: false
     creates: "{{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}"
 
 - name: Unarchive Java JCE package
   tags: java
-  when: not util_fact_check_mode
+  when: not lib_fact_check_mode
   unarchive:
-    src: "{{ util_persistent_data_path_remote }}/{{ java_oracle_redis_jce_filename }}"
+    src: "{{ lib_persistent_data_path_remote }}/{{ java_oracle_redis_jce_filename }}"
     dest: /tmp/
     copy: false
     creates: /tmp/{{ java_oracle_redis_jce_archive_dirname }}
@@ -137,27 +140,11 @@
     dest: "{{ java_install_dir }}"
 
 
-# Setup a custom fact to allow roles depending on Java to configure
-#   JAVA_HOME variable
-- name: Set JAVA_HOME ansible fact
+- name: Include local facts tasks
   tags: java
-  set_fact:
-    java_home: "{{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}"
-
-- name: Install java facts
-  tags: java
-  become: true
-  template:
-    src: facts.j2
-    dest: /etc/ansible/facts.d/java.fact
-    owner: 0
-    group: 0
-    mode: 0644
-
-- name: Re-read local facts
-  tags: java
-  setup:
-    filter: ansible_local
+  include: ../../silpion.lib/tasks/localfacts.yml
+  vars:
+    namespace: java
 
 
 # Configure Java installation as system wide default Java
@@ -174,7 +161,7 @@
 - name: Activate Java system environment configuration
   tags: java
   become: true
-  when: not util_fact_check_mode
+  when: not lib_fact_check_mode
   file:
     state: link
     src: "{{ java_install_dir }}/java.sh"

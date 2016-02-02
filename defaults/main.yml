@@ -18,3 +18,7 @@ java_install_dir: /opt/java
 # Allow to configure shasum binary for local_action: command
 #   This is gathered from java_shasum_binaries automatically if left empty
 java_shasum_binary: ""
+
+
+# Whether to use a cow in templates rather than {# ansible_managed #}
+java_template_use_cow: "{{ util_template_use_cow|default(true) }}"

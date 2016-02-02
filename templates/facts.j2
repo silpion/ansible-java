@@ -1,4 +1,4 @@
-{% if util_template_use_cow %}
+{% if java_template_use_cow %}
 #  --------------------
 # ( Managed by Ansible )
 #  --------------------
@@ -17,4 +17,4 @@
 {% endif %}
 
 [general]
-java_home={{ java_home }}
+java_home={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
