@@ -75,7 +75,6 @@ EXAMPLES = '''
 '''
 
 
-import sys
 import os
 
 
