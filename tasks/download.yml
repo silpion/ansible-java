@@ -108,7 +108,9 @@
   tags:
     - java
     - java_download
-  with_items: ["{{ java_oracle_redis_filename }}", "{{ java_oracle_redis_jce_filename }}"]
+  with_items:
+    - "{{ java_oracle_redis_filename }}"
+    - "{{ java_oracle_redis_jce_filename }}"
   local_action: file
   args:
     dest: "{{ lib_persistent_data_path_local }}/{{ item }}"
