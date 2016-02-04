@@ -96,6 +96,9 @@
       --location
       --insecure
       --remote-name
+      --connect-timeout 4
+      --retry 2
+      --retry-delay 4
       --cookie oraclelicense={{ java_oracle_curl_cookie }}
       --cookie-jar /tmp/{{ java_oracle_redis_filename }}.cookie
       {{ item.uri }}
