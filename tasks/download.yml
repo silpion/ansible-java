@@ -41,7 +41,7 @@
   local_action: template
   args:
     src: sha256sum.j2
-    dest: "{{ util_persistent_data_path_local }}/java-{{ java_oracle_version }}-{{ java_oracle_distribution }}.sha256sum"
+    dest: "{{ lib_persistent_data_path_local }}/java-{{ java_oracle_version }}-{{ java_oracle_distribution }}.sha256sum"
     mode: 0644
 
 
@@ -60,7 +60,7 @@
       --check
       --status
       {{ '--algorithm 256' if java_fact_shasum_binary|search('shasum') else '' }}
-      {{ util_persistent_data_path_local }}/java-{{ java_oracle_version }}-{{ java_oracle_distribution }}.sha256sum
+      {{ lib_persistent_data_path_local }}/java-{{ java_oracle_version }}-{{ java_oracle_distribution }}.sha256sum
 
 # Ensure there is no broken download on the local disk
 - name: Remove possible broken Java redis package
@@ -69,8 +69,8 @@
     - java_download
   when: java_oracle_redis_exists.rc != 0
   with_items:
-    - "{{ util_persistent_data_path_local }}/{{ java_oracle_redis_filename }}"
-    - "{{ util_persistent_data_path_local }}/{{ java_oracle_redis_jce_filename }}"
+    - "{{ lib_persistent_data_path_local }}/{{ java_oracle_redis_filename }}"
+    - "{{ lib_persistent_data_path_local }}/{{ java_oracle_redis_jce_filename }}"
   local_action: file
   args:
     state: absent
@@ -96,22 +96,27 @@
       --location
       --insecure
       --remote-name
+      --connect-timeout 4
+      --retry 2
+      --retry-delay 4
       --cookie oraclelicense={{ java_oracle_curl_cookie }}
       --cookie-jar /tmp/{{ java_oracle_redis_filename }}.cookie
       {{ item.uri }}
   args:
-    chdir: "{{ util_persistent_data_path_local }}"
-    creates: "{{ util_persistent_data_path_local }}/{{ item.file }}"
+    chdir: "{{ lib_persistent_data_path_local }}"
+    creates: "{{ lib_persistent_data_path_local }}/{{ item.file }}"
 
 # Fixup possible users umask issues
 - name: Ensure downloaded archives are world readable
   tags:
     - java
     - java_download
-  with_items: ["{{ java_oracle_redis_filename }}", "{{ java_oracle_redis_jce_filename }}"]
+  with_items:
+    - "{{ java_oracle_redis_filename }}"
+    - "{{ java_oracle_redis_jce_filename }}"
   local_action: file
   args:
-    dest: "{{ util_persistent_data_path_local }}/{{ item }}"
+    dest: "{{ lib_persistent_data_path_local }}/{{ item }}"
     mode: 0644
 
 # Test whether downloaded redistributable package passes sha256sum
@@ -125,4 +130,4 @@
       --check
       --status
       {{ '--algorithm 256' if java_fact_shasum_binary|search('shasum') else '' }}
-      {{ util_persistent_data_path_local }}/java-{{ java_oracle_version }}-{{ java_oracle_distribution }}.sha256sum
+      {{ lib_persistent_data_path_local }}/java-{{ java_oracle_version }}-{{ java_oracle_distribution }}.sha256sum

@@ -1,84 +1,70 @@
 # (c) 2015, Mark Kusch <mark.kusch@silpion.de>
 
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
 import os
-
-from ansible import utils
-from ansible import errors
-from ansible.runner.return_data import ReturnData
+from ansible.plugins.action import ActionBase
+from ansible.utils.boolean import boolean
 
 
-class ActionModule(object):
+class ActionModule(ActionBase):
 
     TRANSFER_FILES = True
 
-    def __init__(self, runner):
-        self.runner = runner
-
-    def run(self, conn, tmp, module_name, module_args, inject, complex_args=None, **kwargs):
+    def run(self, tmp=None, task_vars=None):
         ''' handler for file transfer operations '''
 
-        options = {}
-        if complex_args:
-            options.update(complex_args)
-        options.update(utils.parse_kv(module_args))
+        if task_vars is None:
+            task_vars = dict()
+        result = super(ActionModule, self).run(tmp, task_vars)
 
-        crt = options.get('crt', None)
-        copy = utils.boolean(options.get('copy', 'yes'))
-        creates = options.get('creates', None)
-
+        crt = self._task.args.get('crt', None)
+        copy = boolean(self._task.args.get('copy', 'yes'))
+        creates = self._task.args.get('creates', None)
 
         # this module requires at least the crt= to be present
         if crt is None:
-            result = dict(failed=True, msg="crt is required")
-            return ReturnData(conn=conn, result=result)
+            result['failed'] = True
+            result['msg'] = "crt is required"
+            return result
 
+        if not tmp:
+            tmp = self._make_tmp_path()
 
         # skip if creates= is added to the module and the destination file already exists
         if creates:
-            stat_module_args = ""
-            stat_complex_args = dict(path=creates, get_md5=False, get_checksum=False)
-            stat_module = self.runner._execute_module(
-                conn,
-                tmp,
-                'stat',
-                stat_module_args,
-                complex_args=stat_complex_args,
-                inject=inject,
-                persist_files=True
-            )
-            stat = stat_module.result.get('stat', None)
-            if stat and stat.get('exists', False):
-                return ReturnData(
-                    conn=conn,
-                    comm_ok=True,
-                    result=dict(
-                        skipped=True,
-                        changed=False,
-                        msg=("skipped, since %s exists" % creates)
-                    )
-                )
+            result = self._execute_module(module_name='stat', module_args=dict(path=creates), task_vars=task_vars)
+            stat = result.get('stat', None)
 
-        crt = utils.template.template(self.runner.basedir, os.path.expanduser(crt), inject)
+            if stat and stat.get('exists', False):
+                result['skipped'] = True
+                result['msg'] = "skipped, since %s exists" % creates
+                return result
+
+        crt = os.path.expanduser(crt)
 
         # copy files
         if copy:
-            source = utils.path_dwim(self.runner.basedir, crt)
-            dest = tmp + os.path.basename(crt)
-            conn.put_file(source, dest)
+            source = self._loader.path_dwim_relative(self._loader.get_basedir(), 'files', crt)
 
-            if self.runner.become and self.runner.become_user != 'root':
-                if not self.runner.noop_on_check(inject):
-                    self.runner._remote_chmod(conn, 'a+r', dest, tmp)
+            dest = tmp + os.path.basename(source)
+            self._connection.put_file(source, dest)
 
-            new_module_args = dict(crt=dest)
-            if self.runner.noop_on_check(inject):
-                new_module_args['CHECKMODE'] = True
+            if self._play_context.become and self._play_context.become_user != 'root':
+                if not self._play_context.check_mode:
+                    self._remote_chmod('a+r', dest)
 
-            module_args = utils.merge_module_args(module_args, new_module_args)
+
+            new_module_args = self._task.args.copy()
+            new_module_args.update(
+                dict(
+                    crt=dest,
+                ),
+            )
+
         else:
-            if self.runner.noop_on_check(inject):
-                module_args += " CHECKMODE=True"
-
+            new_module_args = self._task.args.copy()
 
         # run keystore module
-        return self.runner._execute_module(conn, tmp, 'keystore', module_args, complex_args=complex_args, inject=inject)
+        result.update(self._execute_module(module_args=new_module_args, task_vars=task_vars))
+        return result
