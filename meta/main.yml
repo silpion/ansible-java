@@ -3,7 +3,7 @@
 #   Dependencies are pulled into the play and executed in order
 #   of appearance.
 dependencies:
-  - { role: silpion.lib, tags: java }
+  - { role: silpion.util }
 
 
 # https://galaxy.ansibleworks.com
