@@ -1,3 +1,11 @@
+# 2.0.1
+
+Mark Kusch (4):
+
+* Re-add dependency to silpion.util
+* ansible-galaxy shall install both lib and util roles
+* Minor documentation "fixes" related to dependencies
+
 # 2.0.0
 
 Anja Siek (2):

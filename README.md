@@ -2,7 +2,7 @@
 
 Install Oracle Java.
 
-## Synopsis
+# Synopsis
 
 ```yaml
 - name: Install Java 8u66 JDK to /opt/java
@@ -29,7 +29,7 @@ Install Oracle Java.
       oracle_java_distribution: jre
 ```
 
-## Description
+# Description
 
 The role downloads redistributable packages from the internet
 to the hosts local filesystem before it may install those on
@@ -48,25 +48,19 @@ configured via ``java_shasum_binary: /path/to/shasum/binary``.
 For detailed configuration options see [Role Variables](#role_variables)
 documentation below.
 
-## Dependencies
+# Dependencies
 
-``silpion.java`` role depends on the ``silpion.lib`` role. This
-is configured for the ``ansible-galaxy install`` command in
+* [silpion.lib][1]
+* [silpion.util][2]
+
+roles. This is configured for the ``ansible-galaxy install`` command in
 **requirements.yml**.
 
-**NOTE**: Ensure ``silpion.lib`` role is getting installed as ``silpion.lib``.
-There are hardcoded references to this name in this role.
-
 ```sh
-# Install silpion.lib role with ansible-galaxy
-ansible-galaxy install --role-file requirements.yml
+ansible-galaxy install --no-deps --role-file requirements.yml
 ```
 
-### Roles
-
-* [silpion.lib](https://github.com/silpion/ansible-lib)
-
-## <a name="role_variables"></a>Role Variables
+# <a name="role_variables"></a>Role Variables
 
 * ``java_oracle_distribution``: Configure the Java distribution to be installed (default: ``jdk``, values: [``jdk``, ``jre``, ``srv``])
 * ``java_oracle_version``: Configure Java version to be installed (string, default: ``8u66``)
@@ -75,7 +69,7 @@ ansible-galaxy install --role-file requirements.yml
 
 Note: ``srv`` is an Ansible compatible shorthand for the Oracle ``server-jre``.
 
-### Versioned variables
+## Versioned variables
 
 Predefined SHA sums and further version specific configuration may get found in
 the ``vars/versions`` directory. When configuring a version, that is not predefined
@@ -94,7 +88,7 @@ the ``vars/versions`` directory. When configuring a version, that is not predefi
 * ``java_oracle_redis_jce_filename``:  File name of the Oracle Java JCE policies package
 * ``java_oracle_redis_jce_archive_dirname``: Name of the base directory in the Oracle Java JCE policies package
 
-### Supported versions
+## Supported versions
 
 * 7u21
 * 7u51
@@ -116,7 +110,7 @@ Starting with
 
 configuration of ``java_oracle_distribution``: ``srv`` is available.
 
-## Role facts
+# Role facts
 
 This role sets persistent facts for other roles to use via
 
@@ -124,20 +118,14 @@ This role sets persistent facts for other roles to use via
 
 This variable contains the path to the default JVM configured with this role.
 
-## Checkmode
+# Checkmode
 
 Checkmode is supported provided that all assets have been downloaded.
 Otherwise, the copy tasks will fail.
 
 You can download the assets without making any changes on the remote nodes by executing this role with the ``java_download`` tag.
 
-## Example playbook
-
-    - hosts: all
-      roles:
-        - { role: ansible-java }
-
-## Contributing
+# Contributing
 
 If you want to contribute to this repository please be aware that this
 project uses a [gitflow](http://nvie.com/posts/a-successful-git-branching-model/)
@@ -146,23 +134,28 @@ workflow with the next release branch called ``next``.
 Please fork this repository and create a local branch split off of the ``next``
 branch and create pull requests back to the origin ``next`` branch.
 
-## License
+# License
 
 Apache Version 2.0
 
-## Author
+# Author
 
 * Mark Kusch @mark.kusch silpion.de
 * Marc Rohlfs @marc.rohlfs silpion.de
 * Alvaro Aleman @alvaro.aleman silpion.de
 
-### Contributors
+## Contributors
 
 * Lars Maehlmann @lars.maehlmann silpion.de
 * Sebastian Davids @sebastian.davids silpion.de
 * [ludovicc](https://github.com/ludovicc)
 * [nixlike](https://github.com/nixlike)
 * [trumant](https://github.com/trumant)
+
+
+
+[1]: https://github.com/silpion/ansible-lib
+[2]: https://github.com/silpion/ansible-util
 
 
 <!-- vim: set ts=4 sw=4 et nofen: -->
