@@ -50,14 +50,13 @@ documentation below.
 
 # Dependencies
 
-* [``silpion.lib``][1]
-* [``silpion.util``][2]
+* [silpion.lib][1]
+* [silpion.util][2]
 
 roles. This is configured for the ``ansible-galaxy install`` command in
 **requirements.yml**.
 
 ```sh
-# Install silpion.lib role with ansible-galaxy
 ansible-galaxy install --no-deps --role-file requirements.yml
 ```
 
