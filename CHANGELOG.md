@@ -1,3 +1,20 @@
+# 2.0.0
+
+Anja Siek (2):
+
+* fix keystore module for v2 compatibility
+
+Mark Kusch (12):
+
+* Add dependency to min Ansible version 2.0.0.2
+* Update documentation to be hopefully more meaningful
+* Wrap util\_template\_use\_cow variable for templates
+* Use lib\_ variables for templates
+* Update dependencies from util to lib
+* ansible-java librification
+* Do not download anything in --check mode operations
+* Do not allow curl to hang the play forever
+
 # 1.6.0
 
 Alvaro Aleman (1):
