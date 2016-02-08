@@ -1,3 +1,9 @@
+# 2.0.2
+
+Mark Kusch (1):
+
+* Fixup dependency management
+
 # 2.0.1
 
 Mark Kusch (4):
