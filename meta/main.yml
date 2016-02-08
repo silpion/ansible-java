@@ -3,8 +3,8 @@
 #   Dependencies are pulled into the play and executed in order
 #   of appearance.
 dependencies:
-  src: https://github.com/silpion/ansible-util
-  name: silpion.util
+  - src: https://github.com/silpion/ansible-util
+    name: silpion.util
 
 
 # https://galaxy.ansibleworks.com
