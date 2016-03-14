@@ -23,6 +23,7 @@
   always_run: true
   with_first_found: java_shasum_binaries
   local_action: command true
+  become: false
 
 - name: Configure shasum binary
   tags:
@@ -32,6 +33,7 @@
   local_action: set_fact
   args:
     java_fact_shasum_binary: "{{ java_shasum_binary if java_shasum_binary not in (None, '') else java_registered_shasum_binary.results.0.item }}"
+  become: false
 
 
 - name: Install Java redis packages sha256sum files
@@ -43,7 +45,9 @@
     src: sha256sum.j2
     dest: "{{ lib_persistent_data_path_local }}/java-{{ java_oracle_version }}-{{ java_oracle_distribution }}.sha256sum"
     mode: 0644
-
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
 
 # Test whether we need to download Java (again).
 - name: Verify Java redis package sha256sum
@@ -61,6 +65,9 @@
       --status
       {{ '--algorithm 256' if java_fact_shasum_binary|search('shasum') else '' }}
       {{ lib_persistent_data_path_local }}/java-{{ java_oracle_version }}-{{ java_oracle_distribution }}.sha256sum
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
 
 # Ensure there is no broken download on the local disk
 - name: Remove possible broken Java redis package
@@ -75,6 +82,9 @@
   args:
     state: absent
     dest: "{{ item }}"
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
 
 
 # Download the Java distribution from Oracle to the workstations'
@@ -105,6 +115,9 @@
   args:
     chdir: "{{ lib_persistent_data_path_local }}"
     creates: "{{ lib_persistent_data_path_local }}/{{ item.file }}"
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
 
 # Fixup possible users umask issues
 - name: Ensure downloaded archives are world readable
@@ -118,6 +131,9 @@
   args:
     dest: "{{ lib_persistent_data_path_local }}/{{ item }}"
     mode: 0644
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
 
 # Test whether downloaded redistributable package passes sha256sum
 - name: Verify Oracle Java redis packages sha256sum
@@ -131,3 +147,6 @@
       --status
       {{ '--algorithm 256' if java_fact_shasum_binary|search('shasum') else '' }}
       {{ lib_persistent_data_path_local }}/java-{{ java_oracle_version }}-{{ java_oracle_distribution }}.sha256sum
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
