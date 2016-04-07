@@ -63,7 +63,7 @@
 - name: Install required packages
   tags: java
   become: true
-  with_items: java_package_list
+  with_items: "{{ java_package_list }}"
   action: "{{ ansible_pkg_mgr }}"
   args:
     state: "{{ util_package_state|default('present') }}"
