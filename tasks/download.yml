@@ -17,7 +17,9 @@
   tags:
     - java
     - java_download
-  become: false
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
   changed_when: false
   register: java_registered_shasum_binary
   when: java_shasum_binary in (None, "")
@@ -29,7 +31,9 @@
   tags:
     - java
     - java_download
-  become: false
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
   always_run: true
   local_action: set_fact
   args:
