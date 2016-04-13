@@ -63,7 +63,7 @@
 - name: Install required packages
   tags: java
   become: true
-  with_items: java_package_list
+  with_items: "{{ java_package_list }}"
   action: "{{ ansible_pkg_mgr }}"
   args:
     state: "{{ util_package_state|default('present') }}"
@@ -86,7 +86,6 @@
 # Install the Oracle redistributable package to the node
 - name: Copy Java redistributable packages
   tags: java
-  become: ...
   when: not lib_fact_check_mode
   with_items:
     - "{{ java_oracle_redis_filename }}"
