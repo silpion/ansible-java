@@ -86,7 +86,6 @@
 # Install the Oracle redistributable package to the node
 - name: Copy Java redistributable packages
   tags: java
-  become: ...
   when: not lib_fact_check_mode
   with_items:
     - "{{ java_oracle_redis_filename }}"
