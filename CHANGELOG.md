@@ -1,3 +1,15 @@
+# 2.1.0
+
+Ludovic Claude (1):
+
+* Use local become settings from sipion.util
+
+Mark Kusch (3):
+
+* Fix ansible v2 deprecation warnings
+* Do not hardcode privilege escalation
+* Remove stub become configuration
+
 # 2.0.3
 
 Mark Kusch (1):
