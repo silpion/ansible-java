@@ -19,7 +19,7 @@ class ActionModule(ActionBase):
         result = super(ActionModule, self).run(tmp, task_vars)
 
         crt = self._task.args.get('crt', None)
-        copy = boolean(self._task.args.get('copy', 'yes'))
+        copy = self._task.args.get('copy', True)
         creates = self._task.args.get('creates', None)
 
         # this module requires at least the crt= to be present
@@ -28,8 +28,9 @@ class ActionModule(ActionBase):
             result['msg'] = "crt is required"
             return result
 
+        remote_user = task_vars.get('ansible_ssh_user') or self._play_context.remote_user
         if not tmp:
-            tmp = self._make_tmp_path()
+            tmp = self._make_tmp_path(remote_user)
 
         # skip if creates= is added to the module and the destination file already exists
         if creates:
