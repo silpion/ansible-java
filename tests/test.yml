@@ -30,15 +30,16 @@
 
 - name: Test silpion/ansible-java role keystore module
   hosts: all
+  vars:
+    java_keystore_certificates:
+      - name: foo.bar.org
+        crt: foo.bar.org.crt
+      - name: bar.foo.org
+        crt: bar.foo.org.crt
+    java_keystore_file: /tmp/cacerts
+    java_keystore_pass: changeit
   roles:
     - role: ansible-java
-      java_keystore_certificates:
-        - name: foo.bar.org
-          crt: foo.bar.org.crt
-        - name: bar.foo.org
-          crt: bar.foo.org.crt
-      java_keystore_file: /tmp/cacerts
-      java_keystore_pass: changeit
   tasks:
     - name: Manage custom keystore
       tags:
