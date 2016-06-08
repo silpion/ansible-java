@@ -32,7 +32,6 @@ galaxy_info:
     - 20
     - 21
     - 22
-    - 23
   - name: Ubuntu
     versions:
     - trusty
