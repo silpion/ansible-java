@@ -69,8 +69,7 @@
   tags: java
   become: true
   with_items: "{{ java_package_list }}"
-  action: "{{ ansible_pkg_mgr }}"
-  args:
+  package:
     state: "{{ util_package_state|default('present') }}"
     name: "{{ item }}"
 
