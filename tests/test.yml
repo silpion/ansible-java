@@ -14,7 +14,20 @@
       java_oracle_version: 7u80
       java_oracle_distribution: srv
 
+    - ansible-java
+  tasks:
+    - name: Ensure java didn't get implicitly upgraded
+      tags:
+        - java
+        - test
+      assert:
+        that:
+          - ansible_local.java.general.version == '7u80'
+          - ansible_local.java.general.distribution == 'srv'
 
+- name: Test silpion/ansible-java role #2
+  hosts: vagrant_versions
+  roles:
     - role: ansible-java
       java_oracle_version: 8u66
       java_oracle_distribution: jre
