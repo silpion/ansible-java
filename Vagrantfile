@@ -51,7 +51,7 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
     #   ansible-galaxy dependency managemant
     d.vm.provision "galaxy", type: :ansible do |ansible|
       ansible.playbook = 'tests/test.yml'
-      ansible.galaxy_roles_path = 'tests/roles:../'
+      ansible.galaxy_roles_path = 'tests/roles/'
       ansible.galaxy_role_file = 'tests/requirements.yml'
       ansible.galaxy_command = 'ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --ignore-errors --force'
     end
