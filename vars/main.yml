@@ -1,4 +1,7 @@
 ---
+java_role_version: "{{ lookup('file', role_path + '/VERSION') }}"
+java_fact_initial_checkmode: false
+
 java_supported_platform:
   - Debian
   - RedHat
