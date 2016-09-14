@@ -12,9 +12,34 @@ task :up do
 end
 
 
+desc "ansible-galaxy install..."
+task :galaxy do
+  sh %{vagrant provision --provision-with galaxy}
+end
+
+desc "ansible-playbook --limit vagrant_versions"
+task :versions => [:up] do
+  sh %{vagrant provision --provision-with versions}
+end
+
+desc "ansible-playbook --limit vagrant_keystore"
+task :keystore => [:up] do
+  sh %{vagrant provision --provision-with keystore}
+end
+
+desc "ansible-playbook --limit vagrant_current"
+task :current => [:up] do
+  sh %{vagrant provision --provision-with current}
+end
+
+desc "ansible-playbook --limit vagrant_idempotency"
+task :idempotency => [:current] do
+  sh %{vagrant provision --provision-with idempotency}
+end
+
+
 desc "Provision Vagrant VM"
-task :provision => [:up] do
-  sh %{vagrant provision}
+task :provision => [:galaxy, :versions, :keystore, :idempotency] do
 end
 
 

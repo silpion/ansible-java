@@ -16,17 +16,22 @@
     that:
       - java_oracle_distribution in ('jdk', 'jre', 'srv')
 
-
-- name: Include --check mode detection
-  tags: java
-  include: ../../silpion.lib/tasks/checkmodedetection.yml
+- name: Configure initial --check_mode fact
+  tags:
+    - java
+    - java_download
+  when:
+    - ansible_check_mode
+    - not (ansible_local|default({})).java is defined
+  set_fact:
+    java_fact_initial_check_mode: true
 
 
 - name: Include version specific configuration
   tags:
     - java
     - java_download
-  include: ../../silpion.lib/tasks/version-specific-vars.yml
+  include: "{{ playbook_dir }}/roles/silpion.lib/tasks/version-specific-vars.yml"
   vars:
     version: "{{ java_oracle_version }}"
 
@@ -42,18 +47,18 @@
 
 - name: Include OS specific configuration
   tags: java
-  include: ../../silpion.lib/tasks/os-specific-vars.yml
+  include: "{{ playbook_dir }}/roles/silpion.lib/tasks/os-specific-vars.yml"
 
 
 - name: Include assets persistency tasks
   tags: java
-  include: ../../silpion.lib/tasks/datapersistency.yml
+  include: "{{ playbook_dir }}/roles/silpion.lib/tasks/datapersistency.yml"
 
 
 # Manage local download of Oracle Java redistributable
 - name: Manage download of Java redistributables
   include: download.yml
-  when: not lib_fact_check_mode
+  when: not ansible_check_mode
   tags:
     - java
     - download
@@ -64,8 +69,7 @@
   tags: java
   become: true
   with_items: "{{ java_package_list }}"
-  action: "{{ ansible_pkg_mgr }}"
-  args:
+  package:
     state: "{{ util_package_state|default('present') }}"
     name: "{{ item }}"
 
@@ -86,18 +90,18 @@
 # Install the Oracle redistributable package to the node
 - name: Copy Java redistributable packages
   tags: java
-  when: not lib_fact_check_mode
+  when: not ansible_check_mode
   with_items:
     - "{{ java_oracle_redis_filename }}"
     - "{{ java_oracle_redis_jce_filename }}"
-  include: ../../silpion.lib/tasks/copy.yml
+  include: "{{ playbook_dir }}/roles/silpion.lib/tasks/copy.yml"
   vars:
     filename: "{{ item }}"
 
 - name: Install Java
   tags: java
   become: true
-  when: not lib_fact_check_mode
+  when: not ansible_check_mode
   unarchive:
     src: "{{ lib_persistent_data_path_remote }}/{{ java_oracle_redis_filename }}"
     dest: "{{ java_install_dir }}/oracle/"
@@ -106,7 +110,7 @@
 
 - name: Unarchive Java JCE package
   tags: java
-  when: not lib_fact_check_mode
+  when: not ansible_check_mode
   unarchive:
     src: "{{ lib_persistent_data_path_remote }}/{{ java_oracle_redis_jce_filename }}"
     dest: /tmp/
@@ -117,7 +121,7 @@
 - name: Install Java JCE policies
   tags: java
   become: true
-  when: not lib_fact_check_mode
+  when: not ansible_check_mode
   changed_when: false
   with_items:
     - local_policy.jar
@@ -145,7 +149,7 @@
 
 - name: Include local facts tasks
   tags: java
-  include: ../../silpion.lib/tasks/localfacts.yml
+  include: "{{ playbook_dir }}/roles/silpion.lib/tasks/localfacts.yml"
   vars:
     namespace: java
 
@@ -164,7 +168,7 @@
 - name: Activate Java system environment configuration
   tags: java
   become: true
-  when: not lib_fact_check_mode
+  when: not ansible_check_mode
   file:
     state: link
     src: "{{ java_install_dir }}/java.sh"

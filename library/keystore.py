@@ -152,15 +152,15 @@ class Keystore(object):
 def main():
     module = AnsibleModule(
         argument_spec = dict(
-            state = dict(default='present', choices=['present', 'absent'], type='str'),
-            path = dict(aliases=['name', 'dest'], required=True, type='str'),
-            create = dict(default=True, choices=BOOLEANS),
+            state = dict(required=False, choices=['present', 'absent'], type='str', default='present'),
+            path = dict(required=True, aliases=['name', 'dest'], type='str'),
+            create = dict(required=False, type='bool', default=True),
             alias = dict(required=True, type='str'),
-            crt = dict(required=False, default=None, type='str'),
-            keytool = dict(required=False, default=None, type='str'),
-            password = dict(required=True, default=None, type='str'),
-            copy = dict(required=False, choices=BOOLEANS, default=True),
-            creates = dict(required=False, default=None, type='str'),
+            crt = dict(required=False, type='str', default=None),
+            keytool = dict(required=False, type='str', default=None),
+            password = dict(required=True, type='str', default=None),
+            copy = dict(required=False, type='bool', default=True),
+            creates = dict(required=False, type='str', default=None),
         ),
         add_file_common_args=True,
         supports_check_mode=True
