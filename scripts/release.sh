@@ -121,10 +121,10 @@ echo "# ${RELEASE_VERSION}" > CHANGELOG.md
 echo "" >> CHANGELOG.md
 
 if [[ -n ${LAST_VERSION} ]]; then
-  git shortlog --no-merges next --not ${LAST_VERSION} | sed -e '/^[ \t]/s#^[ \t]*#* #' | perl -pe 's/:$/:\n/g' >> CHANGELOG.md
+  tac <(git shortlog --no-merges next --not ${LAST_VERSION} | sed -e '/^[ \t]/s#^[ \t]*#* #' | perl -pe 's/:$/:\n/g') >> CHANGELOG.md
   cat $FILENAME_TMPCHANGELOG >> CHANGELOG.md
 else
-  git shortlog --no-merges next | sed -e '/^[ \t]/s#^[ \t]*#* #' | perl -pe 's/:$/:\n/g' >> CHANGELOG.md
+  tac <(git shortlog --no-merges next | sed -e '/^[ \t]/s#^[ \t]*#* #' | perl -pe 's/:$/:\n/g') >> CHANGELOG.md
   cat $FILENAME_TMPCHANGELOG >> CHANGELOG.md
 fi
 echo "Please verify and adjust version information that was prepended to CHANGELOG.md file"

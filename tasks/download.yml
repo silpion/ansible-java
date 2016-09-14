@@ -17,17 +17,23 @@
   tags:
     - java
     - java_download
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
   changed_when: false
   register: java_registered_shasum_binary
   when: java_shasum_binary in (None, "")
   always_run: true
-  with_first_found: java_shasum_binaries
+  with_first_found: "{{ java_shasum_binaries }}"
   local_action: command true
 
 - name: Configure shasum binary
   tags:
     - java
     - java_download
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
   always_run: true
   local_action: set_fact
   args:
@@ -38,18 +44,23 @@
   tags:
     - java
     - java_download
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
   local_action: template
   args:
     src: sha256sum.j2
     dest: "{{ lib_persistent_data_path_local }}/java-{{ java_oracle_version }}-{{ java_oracle_distribution }}.sha256sum"
     mode: 0644
 
-
 # Test whether we need to download Java (again).
 - name: Verify Java redis package sha256sum
   tags:
     - java
     - java_download
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
   ignore_errors: true
   failed_when: false
   changed_when: false
@@ -67,6 +78,9 @@
   tags:
     - java
     - java_download
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
   when: java_oracle_redis_exists.rc != 0
   with_items:
     - "{{ lib_persistent_data_path_local }}/{{ java_oracle_redis_filename }}"
@@ -86,6 +100,9 @@
   tags:
     - java
     - java_download
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
   register: java_oracle_redis_download
   when: java_oracle_redis_exists.rc != 0
   with_items:
@@ -111,6 +128,9 @@
   tags:
     - java
     - java_download
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
   with_items:
     - "{{ java_oracle_redis_filename }}"
     - "{{ java_oracle_redis_jce_filename }}"
@@ -125,6 +145,9 @@
     - java
     - java_download
   when: java_oracle_redis_download.changed
+  become: "{{ util_local_action_become_enable|default(omit) }}"
+  become_user: "{{ util_local_action_become_user|default(omit) }}"
+  become_method: "{{ util_local_action_become_method|default(omit) }}"
   local_action: command
     {{ java_fact_shasum_binary }}
       --check

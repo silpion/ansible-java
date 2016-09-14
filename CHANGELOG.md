@@ -1,3 +1,40 @@
+# 2.2.0
+
+Alvaro Aleman (1):
+
+* Only do upgrades when explicitly asked
+
+Mark Kusch (12):
+
+* Re-run ansible-generator
+* Re-run ansible-generator (part 2)
+* Fixup java\_keystore\_certificates variable undefined
+* Provide separation for better role testing
+* Add role\_version fact
+* Use ansible\_check\_mode fact
+* ansible-java now requires min\_ansible\_version >= 2.1.N
+* Remove leftover keystore test playbook
+* Use package module in favor of action: {{ fact }}
+* Fedora 23 has no python 2
+* Fix vagrant bug with galaxy\_roles\_path
+* Fixup Vagrant/ansible-galaxy for Vagrant >= 1.8.4
+
+Nathan Mische (1):
+
+* Fixing keystore for Ansible 2.1.0.0
+
+# 2.1.0
+
+Ludovic Claude (1):
+
+* Use local become settings from sipion.util
+
+Mark Kusch (3):
+
+* Fix ansible v2 deprecation warnings
+* Do not hardcode privilege escalation
+* Remove stub become configuration
+
 # 2.0.3
 
 Mark Kusch (1):
