@@ -38,6 +38,9 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
   config.vm.box = ENV['ANSIBLE_JAVA_VAGRANT_BOXNAME'] || c['vm']['box']
   config.vm.box_check_update = c['vm']['check_update']
 
+  # use insecure ssh for vagrant
+  config.ssh.insert_key = false
+
   config.vm.define :ansiblejavatest do |d|
 
     d.vm.hostname = 'ansiblejavatest'
