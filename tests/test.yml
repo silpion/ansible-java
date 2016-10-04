@@ -29,17 +29,31 @@
   hosts: vagrant_versions
   roles:
     - role: ansible-java
-      java_oracle_version: 8u66
+      java_oracle_version: 8u101
       java_oracle_distribution: jre
 
     - role: ansible-java
-      java_oracle_version: 8u66
+      java_oracle_version: 8u101
       java_oracle_distribution: jdk
 
     - role: ansible-java
-      java_oracle_version: 8u66
+      java_oracle_version: 8u101
       java_oracle_distribution: srv
 
+- name: Test silpion/ansible-java role #3
+  hosts: vagrant_versions
+  roles:
+    - role: ansible-java
+      java_oracle_version: 8u102
+      java_oracle_distribution: jre
+
+    - role: ansible-java
+      java_oracle_version: 8u102
+      java_oracle_distribution: jdk
+
+    - role: ansible-java
+      java_oracle_version: 8u102
+      java_oracle_distribution: srv
 
 - name: Test silpion/ansible-java role keystore module
   hosts: vagrant_keystore

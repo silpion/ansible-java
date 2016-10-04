@@ -5,7 +5,7 @@ Install Oracle Java.
 # Synopsis
 
 ```yaml
-- name: Install Java 8u66 JDK to /opt/java
+- name: Install Java 8u102 JDK to /opt/java
   hosts: all
   roles:
     - role: silpion.java
@@ -102,6 +102,8 @@ the ``vars/versions`` directory. When configuring a version, that is not predefi
 * 8u60
 * 8u65
 * 8u66
+* 8u101
+* 8u102
 
 Starting with
 
