@@ -22,3 +22,6 @@ java_shasum_binary: ""
 
 # Whether to use a cow in templates rather than {# ansible_managed #}
 java_template_use_cow: "{{ util_template_use_cow|default(true) }}"
+
+# path to lib role
+java_path_to_lib_role: "{{ lib_roles_path|default(playbook_dir + '/roles') }}"

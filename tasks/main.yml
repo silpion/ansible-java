@@ -31,7 +31,7 @@
   tags:
     - java
     - java_download
-  include: "{{ playbook_dir }}/roles/silpion.lib/tasks/version-specific-vars.yml"
+  include: "{{ java_path_to_lib_role }}/silpion.lib/tasks/version-specific-vars.yml"
   vars:
     version: "{{ java_oracle_version }}"
 
@@ -47,12 +47,12 @@
 
 - name: Include OS specific configuration
   tags: java
-  include: "{{ playbook_dir }}/roles/silpion.lib/tasks/os-specific-vars.yml"
+  include: "{{ java_path_to_lib_role }}/silpion.lib/tasks/os-specific-vars.yml"
 
 
 - name: Include assets persistency tasks
   tags: java
-  include: "{{ playbook_dir }}/roles/silpion.lib/tasks/datapersistency.yml"
+  include: "{{ java_path_to_lib_role }}/silpion.lib/tasks/datapersistency.yml"
 
 
 # Manage local download of Oracle Java redistributable
@@ -94,7 +94,7 @@
   with_items:
     - "{{ java_oracle_redis_filename }}"
     - "{{ java_oracle_redis_jce_filename }}"
-  include: "{{ playbook_dir }}/roles/silpion.lib/tasks/copy.yml"
+  include: "{{ java_path_to_lib_role }}/silpion.lib/tasks/copy.yml"
   vars:
     filename: "{{ item }}"
 
@@ -149,7 +149,7 @@
 
 - name: Include local facts tasks
   tags: java
-  include: "{{ playbook_dir }}/roles/silpion.lib/tasks/localfacts.yml"
+  include: "{{ java_path_to_lib_role }}/silpion.lib/tasks/localfacts.yml"
   vars:
     namespace: java
 
