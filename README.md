@@ -66,6 +66,7 @@ ansible-galaxy install --no-deps --role-file requirements.yml
 * ``java_oracle_version``: Configure Java version to be installed (string, default: ``8u66``)
 * ``java_install_dir``: Base installation directory for any Java implementation/distribution (string, default: ``/opt/java``)
 * ``java_shasum_binary``: Allows to configure shasum binary for local\_action: command (string, default: ``with_first_found: java_shasum_binaries`` (see ``vars/main.yml``))
+* ``java_path_to_lib_role``: configure path to lib-role, which can get configured via silpion.lib role (string, default: ``{{ lib_roles_path }}``)
 
 Note: ``srv`` is an Ansible compatible shorthand for the Oracle ``server-jre``.
 
