@@ -103,6 +103,7 @@ the ``vars/versions`` directory. When configuring a version, that is not predefi
 * 8u60
 * 8u65
 * 8u66
+* 8u92
 * 8u101
 * 8u102
 
