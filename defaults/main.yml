@@ -10,7 +10,7 @@ java_oracle_distribution: "{{ ansible_local.java.general.distribution if (((ansi
 java_oracle_curl_cookie: accept-securebackup-cookie
 
 #   Version information
-java_oracle_version: "{{ ansible_local.java.general.version if (((ansible_local|default({})).java|default({})).general|default({})).version is defined else '8u66' }}"
+java_oracle_version: "{{ ansible_local.java.general.version if (((ansible_local|default({})).java|default({})).general|default({})).version is defined else '8u102' }}"
 
 # Base installation directory for any Java implementation/distribution
 java_install_dir: /opt/java
@@ -22,3 +22,6 @@ java_shasum_binary: ""
 
 # Whether to use a cow in templates rather than {# ansible_managed #}
 java_template_use_cow: "{{ util_template_use_cow|default(true) }}"
+
+# path to lib role
+java_path_to_lib_role: "{{ lib_roles_path|default(playbook_dir + '/roles') }}"

@@ -5,7 +5,7 @@ Install Oracle Java.
 # Synopsis
 
 ```yaml
-- name: Install Java 8u66 JDK to /opt/java
+- name: Install Java 8u102 JDK to /opt/java
   hosts: all
   roles:
     - role: silpion.java
@@ -66,6 +66,7 @@ ansible-galaxy install --no-deps --role-file requirements.yml
 * ``java_oracle_version``: Configure Java version to be installed (string, default: ``8u66``)
 * ``java_install_dir``: Base installation directory for any Java implementation/distribution (string, default: ``/opt/java``)
 * ``java_shasum_binary``: Allows to configure shasum binary for local\_action: command (string, default: ``with_first_found: java_shasum_binaries`` (see ``vars/main.yml``))
+* ``java_path_to_lib_role``: configure path to lib-role, which can get configured via silpion.lib role (string, default: ``{{ lib_roles_path }}``)
 
 Note: ``srv`` is an Ansible compatible shorthand for the Oracle ``server-jre``.
 
@@ -102,6 +103,8 @@ the ``vars/versions`` directory. When configuring a version, that is not predefi
 * 8u60
 * 8u65
 * 8u66
+* 8u101
+* 8u102
 
 Starting with
 

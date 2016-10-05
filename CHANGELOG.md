@@ -1,3 +1,18 @@
+# 2.2.1
+
+Anja Siek (3):
+
+* update generator
+* use variable instead of hardcoded lib role path
+
+Mark Kusch (1):
+
+* Reduce test playbook for ansible-java
+
+Ruslan Tumarkin (1):
+
+* Add two new supported versions: 8u101, 8u102
+
 # 2.2.0
 
 Alvaro Aleman (1):
