@@ -16,7 +16,7 @@ Install Oracle Java.
   hosts: all
   roles:
     - role: silpion.java
-      oracle_java_distribution: srv
+      java_oracle_distribution: srv
       java_install_dir: /usr/local/java
 ```
 
@@ -25,8 +25,8 @@ Install Oracle Java.
   hosts: all
   roles:
     - role: silpion.java
-      oracle_java_version: 8u60
-      oracle_java_distribution: jre
+      java_oracle_version: 8u60
+      java_oracle_distribution: jre
 ```
 
 # Description
