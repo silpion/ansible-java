@@ -1,0 +1,14 @@
+---
+java_oracle_version_major: 1
+java_oracle_version_minor: 8
+java_oracle_version_patch: 0
+java_oracle_version_update: 121
+java_oracle_version_build: 13
+
+java_oracle_redis_jdk_sha256sum: 97e30203f1aef324a07c94d9d078f5d19bb6c50e638e4492722debca588210bc
+java_oracle_redis_jre_sha256sum: 30bf5fbac0cfbc9201cac1d6973dbc96e5f55043ab315eda8c7aeb23df4f2644
+java_oracle_redis_srv_sha256sum: c25a60d02475499109f2bd6aa483721462aa7bfbb86b23ca6ac59be472747e5d
+java_oracle_redis_jce_sha256sum: f3020a3922efd6626c2fff45695d527f34a8020e938a49292561f18ad1320b59
+java_oracle_mirror_jce: "{{ java_oracle_mirror_base }}/jce/8"
+java_oracle_redis_jce_filename: jce_policy-8.zip
+java_oracle_redis_jce_archive_dirname: UnlimitedJCEPolicyJDK8
