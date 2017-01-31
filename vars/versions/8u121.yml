@@ -12,3 +12,5 @@ java_oracle_redis_jce_sha256sum: f3020a3922efd6626c2fff45695d527f34a8020e938a492
 java_oracle_mirror_jce: "{{ java_oracle_mirror_base }}/jce/8"
 java_oracle_redis_jce_filename: jce_policy-8.zip
 java_oracle_redis_jce_archive_dirname: UnlimitedJCEPolicyJDK8
+
+java_oracle_redis_mirror: "{{ java_oracle_mirror }}/{{ java_oracle_version }}-b{{ java_oracle_version_build }}/e9e7ea248e2c4826b92b3f075a80e441/{{ java_oracle_redis_filename }}"
