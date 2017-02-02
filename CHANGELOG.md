@@ -1,3 +1,19 @@
+# 222
+
+Alvaro Aleman (1):
+
+* Add github issue template
+
+Anja Siek (2):
+
+* add versions support
+* add url-hack for verion 8u121
+
+Mark Kusch (2):
+
+* Add Java 8 update 92 to supported versions (thx to Sebastian Davids)
+* Fix misleading variable names in documentation (thx to robertomoutinho)
+
 # 2.2.1
 
 Anja Siek (3):
