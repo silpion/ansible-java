@@ -1,3 +1,13 @@
+# 223
+
+Anja Siek (1):
+
+* fix broken keystore-module for ansible 2.3
+
+Mark Kusch (1):
+
+* Fix ansible 2.3 deprecation warnings
+
 # 222
 
 Alvaro Aleman (1):
