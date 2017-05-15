@@ -4,7 +4,6 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 import os
 from ansible.plugins.action import ActionBase
-from ansible.utils.boolean import boolean
 
 
 class ActionModule(ActionBase):
