@@ -23,7 +23,7 @@
   changed_when: false
   register: java_registered_shasum_binary
   when: java_shasum_binary in (None, "")
-  always_run: true
+  check_mode: false
   with_first_found: "{{ java_shasum_binaries }}"
   local_action: command true
 
@@ -34,7 +34,7 @@
   become: "{{ util_local_action_become_enable|default(omit) }}"
   become_user: "{{ util_local_action_become_user|default(omit) }}"
   become_method: "{{ util_local_action_become_method|default(omit) }}"
-  always_run: true
+  check_mode: false
   local_action: set_fact
   args:
     java_fact_shasum_binary: "{{ java_shasum_binary if java_shasum_binary not in (None, '') else java_registered_shasum_binary.results.0.item }}"
@@ -65,7 +65,7 @@
   failed_when: false
   changed_when: false
   register: java_oracle_redis_exists
-  always_run: true
+  check_mode: false
   local_action: command
     {{ java_fact_shasum_binary }}
       --check
