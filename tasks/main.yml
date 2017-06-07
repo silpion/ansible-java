@@ -35,15 +35,6 @@
   vars:
     version: "{{ java_oracle_version }}"
 
-- name: Assert version specific configuration
-  tags:
-    - java
-    - java_download
-  assert:
-    that:
-      - java_oracle_redis_{{ java_oracle_distribution }}_sha256sum not in (None, "")
-      - java_oracle_redis_jce_sha256sum not in (None, "")
-
 
 - name: Include OS specific configuration
   tags: java
