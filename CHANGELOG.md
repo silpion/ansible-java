@@ -1,3 +1,14 @@
+# 224
+
+Anja Siek (1):
+
+* remove shasum check and allow to override version variables
+
+Mark Kusch (2):
+
+* Fix YAML syntax error
+* Oracle does allow to download current only so we test current only
+
 # 223
 
 Anja Siek (1):
